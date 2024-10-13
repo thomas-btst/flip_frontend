@@ -1,18 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
+import { APIAxios, RequestConfig, UNKNOWN_ERROR } from "../api/FlipApi";
+import { AxiosError } from "axios";
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-
-type FetchOptions = RequestInit & {
-    method: HttpMethod,
+interface RequestError {
+    status: number,
+    text: string,
 }
 
-export function useFetch<T>(
-    url: string,
-    options?: FetchOptions,
-) {
+export function useAxios<T>(request: RequestConfig) {
     const [data, setData] = useState<T | null>(null)
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const [error, setError] = useState<RequestError | null>(null)
 
     const [trigger, setTrigger] = useState(false)
 
@@ -25,23 +23,20 @@ export function useFetch<T>(
         const controller = new AbortController
         const signal = controller.signal
 
-        fetch(url, {...options, signal})
-            .then((response: Response) => {
-                if (!response.ok)
-                    throw new Error(`HTTP error: status ${response.status}`);
-                return response.json()
-            }).then((data: T) => setData(data))
-            .catch((error: Error) => 
-                error.name === 'AbortError' ||
-                    setError(error.message)
-            )
-            .finally(() => aborted || setLoading(false))
+        APIAxios<T>({...request, signal})
+            .then(data => setData(data))
+            .catch((e: AxiosError) => {
+                if (!aborted) setError({
+                    status: e.status ?? 500,
+                    text: e.response?.statusText ?? UNKNOWN_ERROR,
+                })
+            }).finally(() => {aborted || setLoading(false)})
 
         return () => {
             aborted = true
             controller.abort()
         }
-    }, [url, options, trigger])
+    }, [request, trigger])
 
     const update = useCallback(() => {
         setTrigger(!trigger)
