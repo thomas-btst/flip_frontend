@@ -1,6 +1,7 @@
-import { Input, InputOptions } from "./Input";
+import { Input, InputProps } from "./Input";
 
-export function Password<T extends string | number>(params: InputOptions<T>) {
+export function Password(params: InputProps) {
+
     return (
         <Input
             type="password"

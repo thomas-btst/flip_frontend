@@ -15,9 +15,9 @@ export function NotFound() {
                 <div className='self-stretch flex flex-col justify-evenly py-10'>
                     <div>
                         <div className="text-7xl text-center">404</div>
-                        <div className="text-xl text-center">Oups, Cette page n'existe pas !</div>
+                        <div className="text-xl text-center">Oups, Cette page n&apos;existe pas !</div>
                     </div>
-                    <Link to='/'><div className='bg-light-beige-light p-1.5 text-light-black rounded-md border-light-black border w-fit mx-auto'>Retourner à l'accueil</div></Link>
+                    <Link to='/'><div className='bg-light-beige-light p-1.5 text-light-black rounded-md border-light-black border w-fit mx-auto'>Retourner à l&apos;accueil</div></Link>
                 </div>
             </div>
         </div>

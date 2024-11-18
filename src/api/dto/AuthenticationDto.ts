@@ -2,7 +2,7 @@ import { RoleEnum } from "../../models/UserModel";
 
 export interface LoginDto {
     email: string,
-    password: String,
+    password: string,
 }
 
 export interface RegisterDto {
@@ -14,7 +14,7 @@ export interface RegisterDto {
 
 export interface TokenDto {
     token: string,
-    roles: Array<RoleEnum>,
+    roles: RoleEnum[],
 }
 
 export interface ResetPasswordDto {

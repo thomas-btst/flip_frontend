@@ -1,7 +1,8 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useReducer, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { RoleEnum } from "../models/UserModel";
+import { throwError } from "../utils/throw";
 
-type AuthState = {token: string, roles: Array<RoleEnum>} | null
+type AuthState = {token: string, roles: RoleEnum[]} | null
 
 const AuthContext = createContext<AuthState>(null)
 const AuthSetContext = createContext<((value: AuthState) => void) | null>(null)
@@ -15,15 +16,14 @@ export function AuthProvider({children}: {children: ReactNode}){
         </AuthSetContext.Provider>
     </AuthContext.Provider>
 }
-
 export function useAuth() {
-    return useContext(AuthContext)!
+    return useContext(AuthContext)
 }
 
 export function useIsAuthenticated(): boolean {
-    return useAuth() !== null
+    return useContext(AuthContext) !== null
 }
 
 export function useAuthSet() {
-    return useContext(AuthSetContext)!
+    return useContext(AuthSetContext) ?? throwError('UseAuthSet function must be used within a provider AuthSetContext')
 }

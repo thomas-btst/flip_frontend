@@ -34,12 +34,16 @@ export default tseslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
-    // rules: {
-    //   ...reactHooks.configs.strictTypeChecked.rules,
-    //   'react-refresh/only-export-components': [
-    //     'warn',
-    //     { allowConstantExport: true },
-    //   ],
-    // },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error', 
+        {
+          'varsIgnorePattern': '^_',
+          'argsIgnorePattern': '^_',
+          'ignoreRestSiblings': true,
+        }
+      ],
+      '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
+    },
   },
 )

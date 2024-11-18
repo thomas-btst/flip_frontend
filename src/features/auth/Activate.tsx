@@ -1,15 +1,11 @@
 import { FormEvent, MouseEvent, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi";
 import { AxiosError } from "axios";
-import { TokenDto } from "../../api/dto/AuthenticationDto";
 import { useAuthSet } from "../../contexts/AuthContext";
 import { AuthForm } from "./AuthForm";
 
-export function Activate() {
-    
-    const params = useParams<{email: string}>()
-
+export function Activate({email}: {email: string}) {
     const [code, setCode] = useState("")
 
     const [loading, setLoading] = useState(false)
@@ -23,8 +19,8 @@ export function Activate() {
         if(loading)
             return
 
-        APIAxios<TokenDto>(APIRoutes.POSTActivateUser({
-            email: params.email!!,
+        APIAxios(APIRoutes.POSTActivateUser({
+            email,
             activationKey: code
         }), setLoading)
             .then(token => {
@@ -41,11 +37,9 @@ export function Activate() {
 
     function resendActivationKey(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
-
         setError(null)
-        
-        APIAxios(APIRoutes.POSTSendActivationKey(params.email!))
-            .catch(() => setError(UNKNOWN_ERROR))
+        APIAxios(APIRoutes.POSTSendActivationKey(email))
+            .catch(() => {setError(UNKNOWN_ERROR)})
     }
 
     return (
@@ -56,6 +50,7 @@ export function Activate() {
             error={error}
             submit="Activer le compte"
             reload={resendActivationKey}
+            prev="/login"
             inputs={[
                 {
                     name: "Code",

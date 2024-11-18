@@ -1,6 +1,4 @@
-export enum RoleEnum {
-    ADMIN
-}
+export type RoleEnum = "ADMIN"
 
 export interface User{
     id: string,

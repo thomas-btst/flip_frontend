@@ -30,7 +30,7 @@ export function Register(){
             firstName,
             lastName,
             password: password1,
-        }), setLoading).then(() => navigate(`/activate/${email}`))
+        }), setLoading).then(() => {navigate(`/activate/${email}`)})
             .catch((e: AxiosError) => {
                 switch(e.status) {
                     case 409: setError("L'adresse mail est déjà utilisée.")

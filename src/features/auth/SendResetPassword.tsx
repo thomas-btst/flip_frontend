@@ -17,8 +17,8 @@ export function SendResetPassword() {
         setError(null)
 
         APIAxios(APIRoutes.POSTSendResetPasswordKey(email), setLoading)
-            .then(() => navigate(`/reset-password/${email}`))
-            .catch(() => setError(UNKNOWN_ERROR))
+            .then(() => {navigate(`/reset-password/${email}`)})
+            .catch(() => {setError(UNKNOWN_ERROR)})
     }
 
     const [email, setEmail] = useState("")

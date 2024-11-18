@@ -1,13 +1,11 @@
 import { FormEvent, MouseEvent, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi";
-import { TokenDto } from "../../api/dto/AuthenticationDto";
 import { useAuthSet } from "../../contexts/AuthContext";
 import { AxiosError } from "axios";
 import { AuthForm } from "./AuthForm";
 
-export function ResetPassword() {
-    const params = useParams<{email: string}>()
+export function ResetPassword({email}: {email: string}) {
     const navigate = useNavigate()
 
     const setAuth = useAuthSet()
@@ -31,8 +29,8 @@ export function ResetPassword() {
             return
         }
 
-        APIAxios<TokenDto>(APIRoutes.POSTResetPassword({
-            email: params.email!,
+        APIAxios(APIRoutes.POSTResetPassword({
+            email: email,
             newPassword: password1,
             verificationKey: code,
         }), setLoading).then(token => {
@@ -49,11 +47,9 @@ export function ResetPassword() {
 
     function resendCode(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
-
         setError(null)
-
-        APIAxios(APIRoutes.POSTSendResetPasswordKey(params.email!))
-            .catch(() => setError(UNKNOWN_ERROR))
+        APIAxios(APIRoutes.POSTSendResetPasswordKey(email))
+            .catch(() => {setError(UNKNOWN_ERROR)})
     }
 
     return (
