@@ -1,0 +1,40 @@
+stages:
+  - build
+  - test
+
+build-image:
+  image: docker:edge-git
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - echo "$CI_REGISTRY_TOKEN" | docker login etulab.univ-amu.fr:5005 -u "$CI_REGISTRY_USER" --password-stdin 
+  script:
+    - docker info
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_IMAGE
+
+build:
+  image: $CI_REGISTRY_IMAGE
+  stage: build
+  needs:
+    - build-image
+  before_script:
+    - cd /app
+  script:
+    - npm run build
+
+code-review:
+  image: $CI_REGISTRY_IMAGE
+  stage: test
+  before_script:
+    - cd /app
+  script:
+    - npm run lint -- --format junit --output-file eslint-report.xml
+    - cp eslint-report.xml /builds/$CI_REGISTRY_USER/flip_frontend
+  artifacts:
+    reports:
+      junit: eslint-report.xml
+    paths:
+      - eslint-report.xml
+    when: always
