@@ -30,11 +30,11 @@ code-review:
   before_script:
     - cd /app
   script:
-    - npm run lint -- --format junit --output-file eslint-report.xml
-    - cp eslint-report.xml /builds/$CI_REGISTRY_USER/flip_frontend
+    - npm run lint
   artifacts:
-    reports:
-      junit: eslint-report.xml
-    paths:
-      - eslint-report.xml
     when: always
+    reports:
+      codequality: gl-codequality.json
+    paths:
+      - gl-codequality.json
+    expire_in: 1 week

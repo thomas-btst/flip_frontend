@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint ./src --format gitlab",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -32,6 +32,7 @@
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
     "eslint": "^9.9.0",
+    "eslint-formatter-gitlab": "^5.1.0",
     "eslint-formatter-junit": "^8.40.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
