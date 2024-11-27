@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto";
-import { User } from "../models/UserModel";
+import { User } from "./dto/User";
 import { CreateProductDto, ProductPaginationDto, ProductType } from "./dto/Product";
 
 type EmptyBody = ""

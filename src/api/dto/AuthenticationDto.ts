@@ -1,4 +1,4 @@
-import { RoleEnum } from "../../models/UserModel";
+import { RoleEnum } from "./User";
 
 export interface LoginDto {
     email: string,

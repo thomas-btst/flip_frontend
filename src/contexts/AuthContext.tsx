@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { RoleEnum } from "../models/UserModel";
+import { RoleEnum } from "../api/dto/User";
 import { throwError } from "../utils/throw";
 
 type AuthState = {token: string, roles: RoleEnum[]} | null
