@@ -36,7 +36,7 @@ export function ProductPagination({search, types, minPrice, maxPrice}: SearchPar
     const {data, isError, isFetchingNextPage, isLoading, hasNextPage, fetchNextPage} = useInfiniteQuery(
         ['products', search, types, minPrice, maxPrice],
         ({pageParam}: InfiniteQueryParams) => APIAxios(APIRoutes.GETProducts({
-            limit: 30,
+            limit: 50,
             pagination: pageParam,
             types,
             minPrice: minPrice ? Math.round(minPrice * 100) : undefined,

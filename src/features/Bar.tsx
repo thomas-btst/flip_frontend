@@ -52,7 +52,11 @@ export function Bar(params: SearchParams) {
             <Link to={auth? "/cart" : "/login"} title={auth ? "Mon panier" : undefined} className="text-black bg-gray-200 hover:bg-gray-300 py-3 px-4 rounded-full font-medium">
                 {auth ? <FontAwesomeIcon icon={faCartShopping}/> : "Se connecter"}
             </Link>
-            <Link to={auth ? "/user" : "/register"} title={auth ? "Profil" : undefined} className="text-white bg-red-600 hover:bg-red-700 py-3 px-4 rounded-full font-medium">
+            <Link 
+                to={auth ? "/account" : "/register"} 
+                title={auth ? "Profil" : undefined} 
+                className={'text-white bg-red-600 hover:bg-red-700 py-3 px-4 rounded-full font-medium'}
+            >
                 {auth ? <FontAwesomeIcon icon={faUser}/> : "S'inscrire"}
             </Link>
         </div>

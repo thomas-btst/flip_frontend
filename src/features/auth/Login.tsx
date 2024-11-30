@@ -64,6 +64,7 @@ export function Login() {
                         onChange: setPassword,
                         type: "password",
                         placeholder: "Saisir votre mot de passe",
+                        relaxed: true,
                     }
                 }
             ]}

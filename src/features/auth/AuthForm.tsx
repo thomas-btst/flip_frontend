@@ -1,19 +1,20 @@
 import { FormEvent, MouseEvent, useMemo, useState } from "react";
 import { Input, InputProps } from "../../components/common/input/Input";
 import { Error } from "../../components/common/Error";
-import { Loading } from "../../components/common/Loading";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faHome, faRotate } from "@fortawesome/free-solid-svg-icons";
 import { Password } from "../../components/common/input/Password";
+import { Button } from "../../components/common/Button";
 
 export type AuthFormInput = {
     name: string,
-    input: InputProps & {id: string}
+    input: InputProps & {id: string, relaxed?: boolean},
 }
 
 export type AuthFormLink = {
-    name: string, to: string
+    name: string,
+    to: string,
 }
 
 type AuthFormProps = {
@@ -31,14 +32,18 @@ type AuthFormProps = {
 export function AuthForm(props: AuthFormProps) {
     const [rotate, setRotate] = useState(false)
 
-    const inputs = useMemo(() => props.inputs.map(({name, input}) => {
+    const inputs = useMemo(() => props.inputs.map(({name, input: {relaxed, ...input}}) => {
         const className="w-full px-3 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md focus:ring focus:border-blue-300 p-1"
         return (
             <div key={input.id}>
                 <label htmlFor={input.id} className="block text-sm font-medium text-gray-700">
                     {name}
                 </label>
-                {input.type === "password" ? <Password className={className} {...input}/> : <Input className={className} {...input}/>}
+                {input.type === "password" ? 
+                    (relaxed ? <Input className={className} {...input} type="password"/> : <Password className={className} {...input}/>)
+                :
+                    <Input className={className} {...input}/>
+                }
             </div>
         )
     }), [props.inputs])
@@ -70,12 +75,13 @@ export function AuthForm(props: AuthFormProps) {
                 <form onSubmit={props.onSubmit} className="space-y-4">
                     {inputs}
                     <div className="flex space-x-3">
-                        <button
+                        <Button
                             type="submit"
-                            className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+                            className="w-full px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+                            loading={props.loading}
                         >
-                            {props.loading ? <Loading loading={props.loading}/> : props.submit ?? props.title}
-                        </button>
+                            {props.submit ?? props.title}
+                        </Button>
                         {props.reload &&
                             <button className={`px-3 ${rotate ? "rotate-[360deg] transition-all duration-1000": ""}`} onClick={refresh}>
                                 <FontAwesomeIcon icon={faRotate}/>

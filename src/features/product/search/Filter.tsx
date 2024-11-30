@@ -49,7 +49,7 @@ export function ProductFilter({search, ...params}: SearchParams) {
         <button className="absolute top-2 left-10 text-xl hover:bg-gray-200 px-3 py-2 rounded-full" onClick={() => {setFilter(!filter)}}>
             <FontAwesomeIcon icon={faSliders}/>
         </button>
-        {filter && <div className="mt-16 mx-auto space-y-3">
+        {filter && <div className="mt-16 mx-auto space-y-3 animate-slideRight">
             <div className="space-y-1">
                 <h5 className="block text-md font-medium">Type du produit</h5>
                 <div className="max-w-md mx-auto mb-4">

@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto";
-import { User } from "./dto/User";
+import { UpdateUser, User } from "./dto/User";
 import { CreateProductDto, ProductPaginationDto, ProductType } from "./dto/Product";
 
 type EmptyBody = ""
@@ -43,11 +43,30 @@ export const APIRoutes = {
         data: loginDto,
     }),
 
-    GETCurrentUser: (bearer: string): RequestConfig<User> => ({
+    GETUserProfile: (bearer: string): RequestConfig<User> => ({
         method: "GET",
         url: "/api/users",
         bearer,
     }),
+
+    PUTUserProfile: (profile: UpdateUser, bearer: string): RequestConfig<EmptyBody> => ({
+        method: "PUT",
+        url: "/api/users",
+        bearer,
+        data: profile,
+    }),
+
+    PUTUserLogo: (logo: File, bearer: string): RequestConfig<EmptyBody> => {
+        const formData = new FormData()
+        formData.append("logo", logo)
+        return {
+            method: "PUT",
+            url: "/api/users/logo",
+            headers: {"Content-Type": "multipart/form-data"},
+            data: formData,
+            bearer,
+        }
+    },
 
     POSTSendActivationKey: (email: string): RequestConfig<EmptyBody> => ({
         method: "POST",
@@ -84,7 +103,7 @@ export const APIRoutes = {
         params,
     }),
 
-    POSTProduct: (productDto: CreateProductDto, picture: File, token: string): RequestConfig<EmptyBody> => {
+    POSTProduct: (productDto: CreateProductDto, picture: File, bearer: string): RequestConfig<EmptyBody> => {
         const formData = new FormData()
         formData.append("productDto", new Blob(
             [JSON.stringify(productDto)],
@@ -94,9 +113,9 @@ export const APIRoutes = {
         return {
             method: "POST",
             url: "/api/products",
-            data: formData,
             headers: {"Content-Type": "multipart/form-data"},
-            bearer: token,
+            data: formData,
+            bearer,
         }
     }
 }

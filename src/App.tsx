@@ -33,7 +33,7 @@ export default function App() {
                             <Route path='' element={<HomePage/>}/>
                             <Route path='search' element={<SearchPage/>}/>
                             <Route element={<AuthenticatedRoute/>}>
-                                <Route path='user' element={<AccountPage/>}/>
+                                <Route path='account' element={<AccountPage/>}/>
                             </Route>
                         </Route>
                         <Route path='*' element={<NotFound/>}/>

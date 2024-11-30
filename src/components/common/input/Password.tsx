@@ -1,7 +1,6 @@
 import { Input, InputProps } from "./Input";
 
 export function Password(params: InputProps) {
-
     return (
         <Input
             type="password"
