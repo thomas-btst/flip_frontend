@@ -1,25 +1,25 @@
 export type RoleEnum = "ADMIN"
 
-export interface Address {
+interface AddressDto {
     line1: string,
     line2: string,
     zipCode: string,
     city: string,
 }
 
-export interface User {
+export interface UserDto {
     id: string,
     firstName: string,
     lastName: string,
     email: string,
     phone?: string,
-    address?: Address,
+    address?: AddressDto,
     logo?: string,
 }
 
-export interface UpdateUser {
+export interface UpdateUserDto {
     firstName: string,
     lastName: string,
     phone: string,
-    address: Address,
+    address: AddressDto,
 }

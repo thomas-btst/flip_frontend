@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto";
-import { UpdateUser, User } from "./dto/User";
-import { CreateProductDto, ProductPaginationDto, ProductType } from "./dto/Product";
+import { UpdateUserDto, UserDto } from "./dto/User";
+import { CreateProductDto, ProductDto, ProductPaginationDto, ProductType } from "./dto/Product";
 
 type EmptyBody = ""
 
@@ -43,13 +43,13 @@ export const APIRoutes = {
         data: loginDto,
     }),
 
-    GETUserProfile: (bearer: string): RequestConfig<User> => ({
+    GETUserProfile: (bearer: string): RequestConfig<UserDto> => ({
         method: "GET",
         url: "/api/users",
         bearer,
     }),
 
-    PUTUserProfile: (profile: UpdateUser, bearer: string): RequestConfig<EmptyBody> => ({
+    PUTUserProfile: (profile: UpdateUserDto, bearer: string): RequestConfig<EmptyBody> => ({
         method: "PUT",
         url: "/api/users",
         bearer,
@@ -101,6 +101,11 @@ export const APIRoutes = {
         method: "GET",
         url: `/api/public/products/limit/${limit.toString()}`,
         params,
+    }),
+
+    GETProduct: (productId: string): RequestConfig<ProductDto> => ({
+        method: "GET",
+        url: `/api/public/products/${encodeURIComponent(productId)}`
     }),
 
     POSTProduct: (productDto: CreateProductDto, picture: File, bearer: string): RequestConfig<EmptyBody> => {

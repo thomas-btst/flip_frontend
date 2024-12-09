@@ -6,7 +6,7 @@ import { faArrowsRotate, faFloppyDisk, faKey, faPenToSquare, faRightFromBracket,
 import { ChangeEvent, FormEvent, MouseEvent, ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Input } from "../components/common/input/Input"
-import { User } from "../api/dto/User"
+import { UserDto } from "../api/dto/User"
 
 function ProfileItem({id, title, children}: {id?: string, title: string, children: ReactNode}) {
     return <div className="flex items-center relative">
@@ -100,7 +100,7 @@ export function Profile({auth}: {auth: AuthState}) {
             .finally(() => { setSaveLoading(false); })
     }
 
-    function hasChanges(user: User): boolean {
+    function hasChanges(user: UserDto): boolean {
         return user.firstName !== firstName ||
             user.lastName !== lastName ||
             (user.phone ?? "") !== phone ||
@@ -136,7 +136,7 @@ export function Profile({auth}: {auth: AuthState}) {
     }, [user])
 
     return (
-        <div>
+        <>
             {user && (
                 <form onSubmit={saveProfile} className="max-w-5xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-6">
                     {/* User Info Section */}
@@ -245,7 +245,7 @@ export function Profile({auth}: {auth: AuthState}) {
                     {UNKNOWN_ERROR}
                 </div>
             )}
-        </div>
+        </>
     );
     
 }

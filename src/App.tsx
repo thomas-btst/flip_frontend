@@ -11,6 +11,7 @@ import { HomePage } from "./pages/HomePage";
 import { SearchPage } from "./pages/SearchPage";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { tanstackQueryClient } from "./config/tanstack.config";
+import { ProductPage } from "./pages/ProductPage";
 
 function AuthenticatedRoute() {
     if (useIsAuthenticated())
@@ -32,6 +33,7 @@ export default function App() {
                             <Route path='reset-password/:email' element={<ResetPasswordPage/>}/>
                             <Route path='' element={<HomePage/>}/>
                             <Route path='search' element={<SearchPage/>}/>
+                            <Route path='product/:productId' element={<ProductPage/>}/>
                             <Route element={<AuthenticatedRoute/>}>
                                 <Route path='account' element={<AccountPage/>}/>
                             </Route>
