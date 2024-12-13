@@ -4,7 +4,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 type InputNumberProps = Omit<InputProps, 'value' | 'onChange'> & {
     decimal: number,
-    value: string | undefined,
+    value?: string | undefined,
     onChange: (val: string | undefined) => void,
 }
 

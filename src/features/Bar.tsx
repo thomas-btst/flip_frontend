@@ -3,9 +3,17 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../components/common/input/Input";
 import { faCartShopping, faScrewdriverWrench, faSearch, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { getSearchProductUrl, SearchParams } from "./product/search/ProductsPagination";
+import { getSearchProductUrl } from "./product/search/ProductsPagination";
 import { useAuth } from "../contexts/AuthContext";
 import { useDebounce } from "../hooks/useDebounce";
+import { ProductType } from "../api/dto/Product";
+
+export interface SearchParams {
+    search?: string,
+    minPrice?: number,
+    maxPrice?: number,
+    types?: ProductType[],
+}
 
 export function Bar(params: SearchParams) {
     const navigate = useNavigate()
@@ -26,7 +34,7 @@ export function Bar(params: SearchParams) {
             <div className="text-black text-lg font-semibold ml-2">Flip</div>
         </Link>
         <form onSubmit={handleSearch} className="relative grow">
-            <button 
+            <button
                 type="submit"
                 className="text-black absolute inset-y-0 left-0 flex items-center pl-4"
             ><FontAwesomeIcon icon={faSearch}/></button>

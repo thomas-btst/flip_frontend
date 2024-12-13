@@ -1,5 +1,4 @@
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../../api/FlipApi"
-import { ProductType } from "../../../api/dto/Product"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons"
 import { ProductCard } from "../ProductCard"
@@ -7,15 +6,10 @@ import { QueryFunctionContext, useInfiniteQuery } from "@tanstack/react-query"
 import { motion } from "framer-motion"
 import Masonry from "react-masonry-css"
 import InfiniteScroll from 'react-infinite-scroller';
+import { SearchParams } from "../../Bar"
+import { Price } from "../../../utils/price"
 
 export type InfiniteQueryParams = QueryFunctionContext<(string | number | ("SKATE" | "DECK" | "WHEEL" | "BEARING" | "GRID_TAPE" | "TRUCK")[] | undefined)[], string | undefined>
-
-export interface SearchParams {
-    search?: string,
-    minPrice?: number,
-    maxPrice?: number,
-    types?: ProductType[],
-}
 
 export function getSearchProductUrl({search, minPrice, maxPrice, types}: SearchParams) {
     const paramsStr = Array<[string,string | undefined]>(
@@ -39,9 +33,16 @@ export function ProductPagination({search, types, minPrice, maxPrice}: SearchPar
             limit: 50,
             pagination: pageParam,
             types,
-            minPrice: minPrice ? Math.round(minPrice * 100) : undefined,
-            maxPrice: maxPrice === undefined ? undefined : +maxPrice,
+            minPrice: minPrice ? Price.toInteger(minPrice) : undefined,
+            maxPrice: maxPrice ? Price.toInteger(maxPrice) : undefined,
             search: search,
+        })).then(pagination => ({
+            ...pagination,
+            products: pagination.products.map(product => ({
+                ...product,
+                picture: `${product.picture}?${new Date().getTime().toString()}`,
+            }))
+
         })),
         {
             keepPreviousData: true,

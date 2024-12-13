@@ -3,19 +3,22 @@ import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi"
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ProductTranslation } from "../../api/dto/Product"
-import MDEditor from "@uiw/react-md-editor"
+import { Price } from "../../utils/price"
 
 export function Product({productId}: {productId: string}) {
     const {data: product, isLoading, isError} = useQuery({
         queryKey: ["product", productId],
-        queryFn: () => APIAxios(APIRoutes.GETProduct(productId))
+        queryFn: () => APIAxios(APIRoutes.GETProduct(productId)).then(product => ({
+            ...product,
+            picture: `${product.picture}?${new Date().getTime().toString()}`
+        }))
     })
     return <>
         {product && (
             <div className="max-w-7xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-6">
                 <div className="flex space-x-6">
                     <img
-                        src={product.picture || "/placeholder-image.png"}
+                        src={product.picture}
                         alt="Product picture"
                         className="w-2/5 object-cover bg-gray-100 rounded-lg shadow"
                     />
@@ -26,10 +29,12 @@ export function Product({productId}: {productId: string}) {
                                 {ProductTranslation.get(product.type)}
                             </span>
                         </div>
-                        <p className="text-xl text-red-900 font-semibold float-right">{product.price} €</p>
+                        <p className="text-xl text-red-900 font-semibold float-right">{Price.toPrice(product.price)} €</p>
                     </div>
                 </div>
-                <MDEditor.Markdown source={product.description} style={{ whiteSpace: 'pre-wrap' }} />
+                <div>
+                    {product.description}
+                </div>
             </div>
         )}
 

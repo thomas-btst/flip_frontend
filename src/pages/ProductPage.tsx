@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom"
 import { throwError } from "../utils/throw"
-import { Bar } from "../features/Bar"
 import { Product } from "../features/product/Product"
 
 export function ProductPage() {
@@ -9,8 +8,5 @@ export function ProductPage() {
     if (!productId)
         throwError("The paramater productId is required")
 
-    return <>
-        <Bar/>
-        <Product productId={productId}/>
-    </>
+    return <Product productId={productId}/>
 }

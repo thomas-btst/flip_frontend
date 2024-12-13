@@ -16,6 +16,7 @@ export function AuthProvider({children}: {children: ReactNode}){
         </AuthSetContext.Provider>
     </AuthContext.Provider>
 }
+
 export function useAuth() {
     return useContext(AuthContext)
 }

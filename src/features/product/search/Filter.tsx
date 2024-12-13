@@ -1,19 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { getSearchProductUrl, SearchParams } from "./ProductsPagination"
+import { getSearchProductUrl } from "./ProductsPagination"
 import { ProductTranslation, ProductType } from "../../../api/dto/Product"
 import { InputNumber } from "../../../components/common/input/Number"
 import Select from 'react-select'
 import { faSliders } from "@fortawesome/free-solid-svg-icons"
 import { useDebounce } from "../../../hooks/useDebounce"
-
-type ProductTypeOptions = {value: ProductType, label: string}[]
-
-const typeOptions: ProductTypeOptions = Array.from(ProductTranslation.entries()).map(([value, label]) => ({
-    value,
-    label,
-}))
+import { SearchParams } from "../../Bar"
+import { selectProductTypeOptions } from "../../../utils/select"
 
 export function ProductFilter({search, ...params}: SearchParams) {
     const navigate = useNavigate()
@@ -30,7 +25,7 @@ export function ProductFilter({search, ...params}: SearchParams) {
                 label,
             }
         })
-    }, [params])
+    }, [params.types])
 
     const [minPrice, setMinPrice] = useState(params.minPrice?.toString())
     const [maxPrice, setMaxPrice] = useState(params.maxPrice?.toString())
@@ -40,7 +35,7 @@ export function ProductFilter({search, ...params}: SearchParams) {
         navigate(getSearchProductUrl({
             search,
             minPrice: minPrice ? +minPrice : undefined,
-            maxPrice: maxPrice === undefined ? undefined : +maxPrice,
+            maxPrice: maxPrice ? +maxPrice : undefined,
             types: newTypes ?? params.types,
         }))
     }
@@ -61,7 +56,7 @@ export function ProductFilter({search, ...params}: SearchParams) {
                         isMulti={true}
                         isClearable={true}
                         isSearchable={true}
-                        options={typeOptions}
+                        options={selectProductTypeOptions}
                     />
                 </div>
             </div>

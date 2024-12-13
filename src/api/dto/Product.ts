@@ -31,6 +31,18 @@ export interface CreateProductDto {
     type: ProductType,
 }
 
+export interface UpdateProductDto {
+    name?: string,
+    description?: string,
+    price?: number,
+    type: ProductType,
+}
+
+export interface ProductPageDto {
+    products: ProductDto[],
+    pages: number,
+}
+
 export interface ProductPaginationDto {
     products: ProductDto[],
     hasMore: boolean,

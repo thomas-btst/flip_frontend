@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto";
 import { UpdateUserDto, UserDto } from "./dto/User";
-import { CreateProductDto, ProductDto, ProductPaginationDto, ProductType } from "./dto/Product";
+import { CreateProductDto, ProductPageDto, ProductDto, ProductPaginationDto, ProductType, UpdateProductDto } from "./dto/Product";
 
 type EmptyBody = ""
 
@@ -90,6 +90,16 @@ export const APIRoutes = {
        data: resetPasswordDto,
     }),
 
+    GETProductsByPage: (
+        limit: number,
+        page: number,
+        params: {search: string, type?: ProductType}
+    ): RequestConfig<ProductPageDto> => ({
+        method: "GET",
+        url: `/api/public/products/limit/${limit.toString()}/page/${page.toString()}`,
+        params,
+    }),
+
     GETProducts: ({limit, ...params}: {
         limit: number,
         pagination?: string,
@@ -108,7 +118,7 @@ export const APIRoutes = {
         url: `/api/public/products/${encodeURIComponent(productId)}`
     }),
 
-    POSTProduct: (productDto: CreateProductDto, picture: File, bearer: string): RequestConfig<EmptyBody> => {
+    POSTProduct: (productDto: CreateProductDto, picture: File, bearer: string): RequestConfig<string> => {
         const formData = new FormData()
         formData.append("productDto", new Blob(
             [JSON.stringify(productDto)],
@@ -122,5 +132,32 @@ export const APIRoutes = {
             data: formData,
             bearer,
         }
-    }
+    },
+
+    PUTProduct: (productId: string, productDto: UpdateProductDto, bearer: string): RequestConfig<string> => {
+        return {
+            method: "PUT",
+            url: `/api/products/${encodeURIComponent(productId)}`,
+            data: productDto,
+            bearer,
+        }
+    },
+
+    PUTProductPicture: (productId: string, picture: File, bearer: string): RequestConfig<string> => {
+        const formData = new FormData()
+        formData.append("picture", picture)
+        return {
+            method: "PUT",
+            url: `/api/products/${encodeURIComponent(productId)}/picture`,
+            headers: {"Content-Type": "multipart/form-data"},
+            data: formData,
+            bearer,
+        }
+    },
+
+    DELETEProduct: (productId: string, bearer: string): RequestConfig<EmptyBody> => ({
+        method: "DELETE",
+        url: `/api/products/${encodeURIComponent(productId)}`,
+        bearer,
+    }),
 }
