@@ -17,6 +17,7 @@ import { AdminProductsPage } from "./pages/admin/AdminProductsPage";
 import { Layout } from "./features/Layout";
 import { AdminCreateProductPage } from "./pages/admin/AdminCreateProductPage";
 import { AdminEditProductPage } from "./pages/admin/AdminEditProductPage";
+import { CartPage } from "./pages/CartPage";
 
 function AuthenticatedRoute() {
     if (useIsAuthenticated())
@@ -52,6 +53,7 @@ export default function App() {
                                 <Route path='product/:productId' element={<ProductPage/>}/>
                                 <Route element={<AuthenticatedRoute/>}>
                                     <Route path='account' element={<AccountPage/>}/>
+                                    <Route path='cart' element={<CartPage/>}/>
                                 </Route>
                                 <Route path="admin" element={<AdminRoute/>}>
                                     <Route path="" element={<AdminPage/>}/>

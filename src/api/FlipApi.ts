@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto";
 import { UpdateUserDto, UserDto } from "./dto/User";
 import { CreateProductDto, ProductPageDto, ProductDto, ProductPaginationDto, ProductType, UpdateProductDto } from "./dto/Product";
+import { CartDto, CartQuantityDto } from "./dto/CartDto";
 
 type EmptyBody = ""
 
@@ -160,4 +161,29 @@ export const APIRoutes = {
         url: `/api/products/${encodeURIComponent(productId)}`,
         bearer,
     }),
+
+    GETCart: (bearer: string): RequestConfig<CartDto> => ({
+        method: "GET",
+        url: "/api/carts",
+        bearer,
+    }),
+
+    GETCartQuantity: (productId: string, bearer: string): RequestConfig<CartQuantityDto> => ({
+        method: "GET",
+        url: `/api/carts/${encodeURIComponent(productId)}/quantity`,
+        bearer,
+    }),
+
+    PATCHCart: (productId: string, quantity: number, bearer: string): RequestConfig<EmptyBody> => ({
+        method: "PATCH",
+        url: `/api/carts/${encodeURIComponent(productId)}`,
+        data: {quantity},
+        bearer,
+    }),
+
+    DELETECart: (productId: string, bearer: string): RequestConfig<EmptyBody> => ({
+        method: "DELETE",
+        url: `/api/carts/${encodeURIComponent(productId)}`,
+        bearer,
+    })
 }

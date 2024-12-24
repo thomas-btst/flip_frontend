@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 import { ProductDto, ProductTranslation } from "../../api/dto/Product";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { Price } from "../../utils/price";
 
 export function ProductCard({ product }: { product: ProductDto }) {
@@ -14,9 +12,6 @@ export function ProductCard({ product }: { product: ProductDto }) {
                         <span className="h-full w-full flex text-white text-lg font-semibold text-center justify-center items-center">
                             Ouvrir
                         </span>
-                        <Link to="/cart" className="absolute bottom-4 right-4 bg-slate-100 hover:bg-slate-200 rounded-full p-2 flex items-center justify-center">
-                            <FontAwesomeIcon icon={faCartPlus} className="w-4 h-4 text-black font-bold"/>
-                        </Link>
                     </div>
                 </div>
                 <div className="p-4">
