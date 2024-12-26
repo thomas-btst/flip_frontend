@@ -3,6 +3,7 @@ import { ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from
 import { UpdateUserDto, UserDto } from "./dto/User";
 import { CreateProductDto, ProductPageDto, ProductDto, ProductPaginationDto, ProductType, UpdateProductDto } from "./dto/Product";
 import { CartDto, CartQuantityDto } from "./dto/CartDto";
+import { CommandDto, CommandPageDto, CommandStatus, ShortCommandDto } from "./dto/CommandDto";
 
 type EmptyBody = ""
 
@@ -181,9 +182,64 @@ export const APIRoutes = {
         bearer,
     }),
 
-    DELETECart: (productId: string, bearer: string): RequestConfig<EmptyBody> => ({
+    DELETECartProduct: (productId: string, bearer: string): RequestConfig<EmptyBody> => ({
         method: "DELETE",
         url: `/api/carts/${encodeURIComponent(productId)}`,
+        bearer,
+    }),
+
+    DELETECart: (bearer: string): RequestConfig<EmptyBody> => ({
+        method: "DELETE",
+        url: "/api/carts",
+        bearer,
+    }),
+
+    POSTCommand: (bearer: string): RequestConfig<string> => ({
+        method: "POST",
+        url: "/api/commands",
+        bearer,
+    }),
+
+    GETCommands: (bearer: string): RequestConfig<ShortCommandDto[]> => ({
+        method: "GET",
+        url: "/api/commands",
+        bearer,
+    }),
+
+    GETCommand: (commandId: string, bearer: string): RequestConfig<CommandDto> => ({
+        method: "GET",
+        url: `/api/commands/${encodeURIComponent(commandId)}`,
+        bearer,
+    }),
+
+    GETAdminCommand: (commandId: string, bearer: string): RequestConfig<CommandDto> => ({
+        method: "GET",
+        url: `/api/commands/admin/${encodeURIComponent(commandId)}`,
+        bearer,
+    }),
+
+    PATCHCancelCommand: (commandId: string, bearer: string): RequestConfig<EmptyBody> => ({
+        method: "PATCH",
+        url: `/api/commands/${encodeURIComponent(commandId)}/cancel`,
+        bearer,
+    }),
+
+    GETCommandPage: (limit: number, page: number, search: string, status: CommandStatus | undefined, bearer: string): RequestConfig<CommandPageDto> => ({
+        method: "GET",
+        url: `/api/commands/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
+        params: {
+            search,
+            status,
+        },
+        bearer,
+    }),
+
+    PATCHCommandStatus: (commandId: string, status: CommandStatus, bearer: string): RequestConfig<EmptyBody> => ({
+        method: "PATCH",
+        url: `/api/commands/${encodeURIComponent(commandId)}`,
+        data: {
+            status,
+        },
         bearer,
     })
 }

@@ -1,4 +1,4 @@
-import { Cart } from "../features/Cart";
+import { Cart } from "../features/cart/Cart";
 
 export function CartPage() {
     return <Cart/>

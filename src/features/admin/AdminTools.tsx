@@ -19,7 +19,7 @@ export function AdminTools() {
         <div className="grid grid-cols-2 gap-7">
             <SquareLink icon={faCartShopping} title="Produits" to="products"/>
             <SquareLink icon={faUser} title="Clients" to="users" disabled/>
-            <SquareLink icon={faFileLines} title="Factures" to="invoices" disabled/>
+            <SquareLink icon={faFileLines} title="Commandes" to="commands"/>
             <SquareLink icon={faChartSimple} title="Statistiques" to="stats" disabled/>
         </div>
     </div>

@@ -18,6 +18,10 @@ import { Layout } from "./features/Layout";
 import { AdminCreateProductPage } from "./pages/admin/AdminCreateProductPage";
 import { AdminEditProductPage } from "./pages/admin/AdminEditProductPage";
 import { CartPage } from "./pages/CartPage";
+import { CommandsPage } from "./pages/command/CommandsPage";
+import { CommandPage } from "./pages/command/CommandPage";
+import { AdminCommandsPage } from "./pages/admin/AdminCommandsPage";
+import { AdminEditCommandPage } from "./pages/admin/AdminEditCommandPage";
 
 function AuthenticatedRoute() {
     if (useIsAuthenticated())
@@ -54,12 +58,16 @@ export default function App() {
                                 <Route element={<AuthenticatedRoute/>}>
                                     <Route path='account' element={<AccountPage/>}/>
                                     <Route path='cart' element={<CartPage/>}/>
+                                    <Route path='commands' element={<CommandsPage/>}/>
+                                    <Route path='command/:commandId' element={<CommandPage/>}/>
                                 </Route>
                                 <Route path="admin" element={<AdminRoute/>}>
                                     <Route path="" element={<AdminPage/>}/>
                                     <Route path="product" element={<AdminCreateProductPage/>}/>
                                     <Route path="product/:productId" element={<AdminEditProductPage/>}/>
                                     <Route path="products" element={<AdminProductsPage/>}/>
+                                    <Route path="commands" element={<AdminCommandsPage/>}/>
+                                    <Route path="command/:commandId" element={<AdminEditCommandPage/>}/>
                                 </Route>
                                 <Route path='*' element={<NotFound/>}/>
                             </Route>

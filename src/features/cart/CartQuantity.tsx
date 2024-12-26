@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { MouseEvent } from "react"
-import { APIAxios, APIRoutes } from "../api/FlipApi"
+import { APIAxios, APIRoutes } from "../../api/FlipApi"
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons"
 
 export function CartQuantity({productId, quantity, loading, setLoading, setError, refetch, token}: {

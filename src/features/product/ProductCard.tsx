@@ -17,7 +17,7 @@ export function ProductCard({ product }: { product: ProductDto }) {
                 <div className="p-4">
                     <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
                     <div className="mt-2 flex justify-between items-center">
-                        <span className="text-gray-800 text-xl">{Price.toPrice(product.price)} €</span>
+                        <span className="text-gray-800 text-xl text-nowrap">{Price.toPrice(product.price)} €</span>
                         <span className="ml-2 bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 border border-gray-400">
                             {ProductTranslation.get(product.type)}
                         </span>

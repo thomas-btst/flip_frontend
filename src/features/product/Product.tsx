@@ -4,16 +4,19 @@ import { faArrowsRotate, faCartPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ProductTranslation } from "../../api/dto/Product"
 import { Price } from "../../utils/price"
-import { CartQuantity } from "../CartQuantity"
+import { CartQuantity } from "../cart/CartQuantity"
 import { useAuth } from "../../contexts/AuthContext"
 import { CartQuantityDto } from "../../api/dto/CartDto"
-import { MouseEvent, useState } from "react"
+import { MouseEvent, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { AxiosError } from "axios"
+import { NotFound } from "../../pages/NotFound"
 
 export function Product({productId}: {productId: string}) {
     const auth = useAuth()
     const navigate = useNavigate()
 
+    const [notFound, setNotFound] = useState(false)
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
 
@@ -22,13 +25,26 @@ export function Product({productId}: {productId: string}) {
         queryFn: () => APIAxios(APIRoutes.GETProduct(productId)).then(product => ({
             ...product,
             picture: `${product.picture}?${new Date().getTime().toString()}`
-        }))
+        })).catch(e => {
+            if (e instanceof AxiosError)
+                if (e.status === 404)
+                    setNotFound(true)
+            throw e
+        }).then(data => {
+            setNotFound(false)
+            return data
+        })
     })
 
     const {data: quantity, isLoading: isLoadingQuantity, isError: isErrorQuantity, refetch} = useQuery<CartQuantityDto>({
         queryKey: ["cart quantity", productId],
         queryFn: () => auth ? APIAxios(APIRoutes.GETCartQuantity(productId, auth.token)) : new Promise<CartQuantityDto>(resolve => { resolve({quantity: 0}); })
     })
+
+    const NotFoundComponent = useMemo(() => <NotFound/>, [])
+
+    if (notFound)
+        return NotFoundComponent
 
     function addToCart(event: MouseEvent<HTMLButtonElement>, productId: string) {
         event.preventDefault()

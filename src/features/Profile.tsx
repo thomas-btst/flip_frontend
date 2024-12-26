@@ -167,7 +167,7 @@ export function Profile({auth}: {auth: AuthState}) {
                         </div>
                         {/* Header main informations */}
                         <div>
-                            <h2 className="text-3xl font-bold text-gray-900">
+                            <h2 className="text-3xl font-bold text-gray-900 text-nowrap">
                                 {`${user.firstName} ${user.lastName}`}
                             </h2>
                             <p className="text-lg text-gray-600">{user.email}</p>

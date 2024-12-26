@@ -1,16 +1,20 @@
 import { useQuery } from "@tanstack/react-query"
-import { useAuth } from "../contexts/AuthContext"
-import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../api/FlipApi"
-import { faArrowsRotate, faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import { useAuth } from "../../contexts/AuthContext"
+import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi"
+import { faArrowRightLong, faArrowsRotate, faClockRotateLeft, faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Price } from "../utils/price"
+import { Price } from "../../utils/price"
 import { MouseEvent, useState } from "react"
 import { CartQuantity } from "./CartQuantity"
+import { Link, useNavigate } from "react-router-dom"
+import { AxiosError } from "axios"
 
 export function Cart() {
     const auth = useAuth()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
+    const [address, setAddress] = useState(false)
+    const navigate = useNavigate()
 
     if (!auth)
         return
@@ -26,15 +30,61 @@ export function Cart() {
             return
         setLoading(true)
         setError(false)
-        APIAxios(APIRoutes.DELETECart(productId, token))
+        APIAxios(APIRoutes.DELETECartProduct(productId, token))
             .then(() => {void refetch()})
             .catch(() => {setError(true)})
             .finally(() => { setLoading(false); })
     }
 
+    function clearCart(event: MouseEvent<HTMLButtonElement>, token :string) {
+        event.preventDefault()
+        if (loading)
+            return
+        setLoading(true)
+        setError(false)
+        APIAxios(APIRoutes.DELETECart(token))
+            .then(() => {void refetch()})
+            .catch(() => {setError(true)})
+            .finally(() => { setLoading(false); })
+    }
+
+    function command(event: MouseEvent<HTMLButtonElement>, token: string) {
+        event.preventDefault()
+        if (loading)
+            return
+        setLoading(true)
+        setAddress(false)
+        setError(false)
+        APIAxios(APIRoutes.POSTCommand(token))
+            .then(commandId => {navigate(`/command/${commandId}`)})
+            .catch(e => {
+                if (e instanceof AxiosError && e.status === 409)
+                    setAddress(true)
+                else
+                    setError(true)
+            })
+            .finally(() => { setLoading(false) })
+    }
+
     return <>
         {cart && cart.products.length !== 0 ?
-            <div className="max-w-5xl mx-auto space-y-10 p-10 rounded-lg shadow-lg">
+            <div className="max-w-5xl mx-auto space-y-10 p-10 rounded-lg shadow-lg flex flex-col">
+                <div className="flex justify-between">
+                    <h2 className="text-2xl font-bold">Votre panier</h2>
+                    <div className="space-x-2">
+                        <button
+                            onClick={event => { clearCart(event, auth.token); }}
+                            className="bg-slate-200 px-2 py-1 rounded-md"
+                        >Vider le panier</button>
+                        <Link
+                            to="/commands"
+                            className="space-x-2 bg-green-100 px-2 py-1.5 text-green-700 hover:text-green-800 hover:bg-green-200 rounded-md size-6 font-semibold"
+                        >
+                            <FontAwesomeIcon icon={faClockRotateLeft}/>
+                            <span>Historique</span>
+                        </Link>
+                        </div>
+                </div>
                 {cart.products.map(product => <div key={product.id} className="border-b border-slate-300 flex space-x-10 pb-10">
                     <img src={product.picture} className="w-40 rounded-md object-contain"/>
                     <div className="flex-grow flex flex-col justify-between">
@@ -73,10 +123,24 @@ export function Cart() {
                             )
                         }
                     </span>
-                    <button className="bg-red-500 text-white rounded-md px-2 py-1 font-bold hover:bg-red-600">Commander</button>
+                    <button
+                        onClick={event => { command(event, auth.token); }}
+                        className="bg-red-500 text-white rounded-md px-2 py-1 font-bold hover:bg-red-600"
+                    >Commander</button>
                 </div>
             </div>
-            : <div className="text-lg mt-10 text-center font-bold">Le panier est vide</div>
+            : <div className="flex flex-col items-center space-y-8">
+                <div className="text-lg mt-10 text-center font-bold">Le panier est vide</div>
+                <div>
+                    <Link
+                        to="/commands"
+                        className="space-x-2 bg-green-100 px-2 py-1.5 text-green-700 hover:text-green-800 hover:bg-green-200 rounded-md size-6 font-semibold"
+                    >
+                        <span>Historique</span>
+                        <FontAwesomeIcon icon={faArrowRightLong}/>
+                    </Link>
+                </div>
+            </div>
         }
 
         {/* Loading State */}
@@ -86,6 +150,13 @@ export function Cart() {
             </div>
         )}
     
+        {/* Address not set */}
+        {(address) && (
+            <div className="text-red-600 text-xl text-center my-6">
+                Merci de remplir votre profile avant de passer la commande
+            </div>
+        )}
+
         {/* Error State */}
         {(isError || error) && (
             <div className="text-red-600 text-xl text-center my-6">

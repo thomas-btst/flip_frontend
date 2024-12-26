@@ -1,6 +1,6 @@
 export type RoleEnum = "ADMIN"
 
-interface AddressDto {
+export interface AddressDto {
     line1: string,
     line2: string,
     zipCode: string,
