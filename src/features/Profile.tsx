@@ -136,13 +136,13 @@ export function Profile() {
     }, [user])
 
     return (
-        <>
+        <div className="mx-3">
             {user && (
                 <form onSubmit={saveProfile} className="max-w-5xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-6">
                     {/* User Info Section */}
-                    <header className="flex items-center space-x-6 w-full">
+                    <header className="flex items-center space-x-6 space-y-4 w-full flex-col md:flex-row relative">
                         {/* Logo */}
-                        <div className="relative group">
+                        <div className="relative group space-y-4">
                             <div className="absolute bg-black hidden group-hover:block bg-opacity-20 rounded-full">
                                 <input
                                     type="file"
@@ -166,14 +166,14 @@ export function Profile() {
                             }
                         </div>
                         {/* Header main informations */}
-                        <div>
+                        <div className="text-center md:text-left">
                             <h2 className="text-3xl font-bold text-gray-900 text-nowrap">
                                 {`${user.firstName} ${user.lastName}`}
                             </h2>
                             <p className="text-lg text-gray-600">{user.email}</p>
                         </div>
                         {/* Form actions */}
-                        <div className="space-y-3">
+                        <div className="space-y-3 flex flex-col items-center">
                             <button
                                 type="button"
                                 onClick={event => { resetPassword(event, user.email); }}
@@ -186,16 +186,17 @@ export function Profile() {
                                 <button
                                     type="submit"
                                     title="Sauvegarder le profile"
-                                    className="px-2 py-1 bg-green-100 text-green-950 hover:bg-green-200 rounded-md border border-green-900"
+                                    className="space-x-2 px-2 py-1 bg-green-100 text-green-950 hover:bg-green-200 rounded-md border border-green-900 text-nowrap"
                                 >
                                     <FontAwesomeIcon icon={faFloppyDisk}/>
+                                    <span>Sauvegarder</span>
                                 </button>
                             }
                         </div>
                         <button
                             onClick={() => {void APIAxios(APIRoutes.POSTLogout()); logout()}}
                             type="button"
-                            className="text-red-600 hover:text-red-800 transition w-full text-right"
+                            className="text-red-600 hover:text-red-800 transition w-full text-right absolute md:relative right-0 top-0"
                             title="Se déconnecter"
                         >
                             <FontAwesomeIcon icon={faRightFromBracket} className="w-6 h-6" />
@@ -205,7 +206,7 @@ export function Profile() {
                     {/* Profile and Address Sections */}
                     <section className="grid md:grid-cols-2 gap-8">
                         {/* Profile Details */}
-                        <article className="space-y-5 border-r border-gray-300 pr-7">
+                        <article className="space-y-5 md:border-r md:border-b-0 border-b border-gray-300 pb-7 md:pb-0 md:pr-7">
                             <ProfileInputItem id="firstName" type="text" title="Prénom" value={firstName} onChange={setFirstName} required/>
                             <ProfileInputItem id="lastName" type="text" title="Nom" value={lastName} onChange={setLastName} required/>
                             <ProfileItem title="Email">{user.email}</ProfileItem>
@@ -245,7 +246,7 @@ export function Profile() {
                     {UNKNOWN_ERROR}
                 </div>
             )}
-        </>
+        </div>
     );
     
 }

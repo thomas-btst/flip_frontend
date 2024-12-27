@@ -73,88 +73,116 @@ export function CreateOrEditProduct({product}: {product?: ProductDto}) {
         }
     }    
     return (
-        <form className="max-w-7xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-6 flex flex-col" onSubmit={handleSubmit}>
-            <div className="w-full border-b pb-5 space-x-10 flex items-center">
-                <h2 className="text-lg font-bold">{product ? "Modifier un produit du catalogue" : "Ajouter un nouveau produit au catalogue"}</h2>
-                <button type="submit" className={`bg-${product ? "green" : "orange"}-100 hover:bg-${product ? "green" : "orange"}-200 rounded-md px-3 py-1 border border-gray-300`}>
-                    <FontAwesomeIcon className="mr-2" icon={product ? faFloppyDisk : faPlus}/>
-                    {product ? "Sauvegarder" : "Ajouter"}
-                </button>
-                {/* Loading State */}
-                {loading && <FontAwesomeIcon icon={faArrowsRotate} className="animate-spin text-xl text-gray-500" />}
-        
-                {/* Error State */}
-                {(error) && (
-                    <div className="text-red-600 text-lg text-center">
-                        {error}
-                    </div>
-                )}
-            </div>
-            <div className="flex space-x-6">
-                <div className="group relative w-2/5 bg-gray-100 rounded-lg shadow">
-                    <div className="absolute w-full h-full bg-black hidden group-hover:block bg-opacity-20">
-                        <input
-                            type="file"
-                            onChange={handlePicture}
-                            className="w-full h-full opacity-0 cursor-pointer"
-                            accept="image/*"
-                        />
-                    </div>
-                    <div className="absolute hidden group-hover:flex w-full h-full pointer-events-none justify-center items-center">
-                        <FontAwesomeIcon className="w-6 h-6 text-slate-100" icon={faPenToSquare} />
-                    </div>
-                    {(picture || product) ?
-                        <img
-                            className="object-cover w-full"
-                            src={picture ? URL.createObjectURL(picture) : product?.picture}
-                            alt="Product picture"
-                        />
-                    :
-                        <div className="min-h-96 flex justify-center items-center">
-                            <FontAwesomeIcon className="group-hover:hidden text-black w-6 h-6" icon={faImage}/>
+        <div className="mx-3">
+            <form className="max-w-7xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-6 flex flex-col" onSubmit={handleSubmit}>
+                <div className="w-full border-b pb-5 space-x-10 flex items-center">
+                    <h2 className="text-lg font-bold">{product ? "Modifier un produit du catalogue" : "Ajouter un nouveau produit au catalogue"}</h2>
+                    <button type="submit" className={`bg-${product ? "green" : "orange"}-100 hover:bg-${product ? "green" : "orange"}-200 rounded-md px-3 py-1 border border-gray-300 text-nowrap`}>
+                        <FontAwesomeIcon className="mr-2" icon={product ? faFloppyDisk : faPlus}/>
+                        {product ? "Sauvegarder" : "Ajouter"}
+                    </button>
+                    {/* Loading State */}
+                    {loading && <FontAwesomeIcon icon={faArrowsRotate} className="animate-spin text-xl text-gray-500" />}
+            
+                    {/* Error State */}
+                    {(error) && (
+                        <div className="text-red-600 text-lg text-center">
+                            {error}
                         </div>
-                    }
+                    )}
                 </div>
-                <div className="w-full flex flex-col space-y-6">
-                    <div>
-                        <Input
-                            className="py-2 px-4 border border-gray-300 rounded-lg bg-gray-50 text-lg font-bold text-black placeholder:text-gray-700 placeholder:font-normal inline-block"
-                            placeholder="Saisir un nom de produit"
-                            value={name}
-                            onChange={setName}
-                            required
-                        />
-                        <Select
-                            className="float-right ml-4"
-                            value={selectProductTypeOptions.find(option => option.value === type)}
-                            onChange={options => {setType(options?.value ?? undefined)}}
-                            placeholder="Catégorie"
-                            isClearable={true}
-                            isSearchable={true}
-                            options={selectProductTypeOptions as {value: ProductType, label: string}[]}
-                            required
-                        />
+                <div className="flex space-x-6">
+                    <div className="hidden md:block group relative w-2/5 bg-gray-100 rounded-lg shadow">
+                        <div className="absolute w-full h-full bg-black hidden group-hover:block bg-opacity-20">
+                            <input
+                                type="file"
+                                onChange={handlePicture}
+                                className="w-full h-full opacity-0 cursor-pointer"
+                                accept="image/*"
+                            />
+                        </div>
+                        <div className="absolute hidden group-hover:flex w-full h-full pointer-events-none justify-center items-center">
+                            <FontAwesomeIcon className="w-6 h-6 text-slate-100" icon={faPenToSquare} />
+                        </div>
+                        {(picture || product) ?
+                            <img
+                                className="object-cover w-full"
+                                src={picture ? URL.createObjectURL(picture) : product?.picture}
+                                alt="Product picture"
+                            />
+                        :
+                            <div className="min-h-96 flex justify-center items-center">
+                                <FontAwesomeIcon className="group-hover:hidden text-black w-6 h-6" icon={faImage}/>
+                            </div>
+                        }
                     </div>
-                    <div className="ml-auto flex items-center space-x-2">
-                        <InputNumber
-                            className="py-1.5 px-2 border border-gray-300 rounded-lg bg-gray-50 w-28"
-                            type="text"
-                            placeholder="Prix"
-                            value={price}
-                            onChange={setPrice}
-                            decimal={2}
-                            required
-                        />
-                        <span className="text-lg font-bold">€</span>
+                    <div className="w-full flex flex-col space-y-6">
+                        <div className="space-y-5 flex flex-col">
+                            <div className="flex flex-col justify-between sm:flex-row space-y-3 sm:space-y-0">
+                                <Input
+                                    className="py-2 px-4 border border-gray-300 rounded-lg bg-gray-50 text-lg font-bold text-black placeholder:text-gray-700 placeholder:font-normal inline-block"
+                                    placeholder="Saisir un nom de produit"
+                                    value={name}
+                                    onChange={setName}
+                                    required
+                                />
+                                <Select
+                                className="self-start"
+                                    value={selectProductTypeOptions.find(option => option.value === type)}
+                                    onChange={options => {setType(options?.value ?? undefined)}}
+                                    placeholder="Catégorie"
+                                    isClearable={true}
+                                    isSearchable={true}
+                                    options={selectProductTypeOptions as {value: ProductType, label: string}[]}
+                                    required
+                                />
+                            </div>
+                            <div className="md:hidden self-center group relative w-3/5 bg-gray-100 rounded-lg shadow">
+                                <div className="absolute w-full h-full bg-black hidden group-hover:block bg-opacity-20">
+                                    <input
+                                        type="file"
+                                        onChange={handlePicture}
+                                        className="w-full h-full opacity-0 cursor-pointer"
+                                        accept="image/*"
+                                    />
+                                </div>
+                                <div className="absolute hidden group-hover:flex w-full h-full pointer-events-none justify-center items-center">
+                                    <FontAwesomeIcon className="w-6 h-6 text-slate-100" icon={faPenToSquare} />
+                                </div>
+                                {(picture || product) ?
+                                    <img
+                                        className="object-cover w-full"
+                                        src={picture ? URL.createObjectURL(picture) : product?.picture}
+                                        alt="Product picture"
+                                    />
+                                :
+                                    <div className="min-h-52 flex justify-center items-center">
+                                        <FontAwesomeIcon className="group-hover:hidden text-black w-6 h-6" icon={faImage}/>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div className="ml-auto flex items-center space-x-2">
+                            <InputNumber
+                                className="py-1.5 px-2 border border-gray-300 rounded-lg bg-gray-50 w-28"
+                                type="text"
+                                placeholder="Prix"
+                                value={price}
+                                onChange={setPrice}
+                                decimal={2}
+                                required
+                            />
+                            <span className="text-lg font-bold">€</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <textarea
-                value={description}
-                className="rounded-sm p-3 border border-slate-200"
-                onChange={event => {event.preventDefault(); setDescription(event.target.value)}}
-                placeholder="Description du produit..."
-            />
-        </form>
+                <textarea
+                    value={description}
+                    className="rounded-sm p-3 border border-slate-200"
+                    onChange={event => {event.preventDefault(); setDescription(event.target.value)}}
+                    placeholder="Description du produit..."
+                />
+            </form>
+        </div>
     )
 }

@@ -31,10 +31,10 @@ export function EditCommand({commandId}: {commandId: string}) {
             .finally(() => { setLoading(false); })
     }
 
-    return <>
+    return <div className="mx-3">
         {command && <div className="max-w-5xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-8">
-            <header className="flex justify-between">
-                <div className="flex justify-between items-center space-x-8">
+            <header className="flex flex-col md:flex-row space-y-5 justify-between">
+                <div className="flex flex-col md:flex-row justify-between md:space-y-0 space-y-4 md:items-center md:space-x-8">
                     <div
                         className="flex flex-col justify-between text-left"
                     >
@@ -64,7 +64,7 @@ export function EditCommand({commandId}: {commandId: string}) {
                     </a>
                 </div>
             </header>
-            <div className="flex items-start space-x-20">
+            <div className="flex flex-col md:flex-row items-start md:space-x-20 md:space-y-0 space-y-7">
                 <div className="space-y-3">
                     <h3 className="text-lg font-bold">Addresse de livraison</h3>
                     <div className="space-y-2">
@@ -85,7 +85,7 @@ export function EditCommand({commandId}: {commandId: string}) {
             </div>
             <div className="space-y-6">
                 <h3 className="text-xl font-bold">Produits</h3>
-                <div className="grid grid-cols-3 justify-center items-center gap-10">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 justify-center items-center gap-6">
                     {command.products.map(product => <Link
                         key={product.productId}
                         to={`/product/${encodeURIComponent(product.productId)}`}
@@ -118,5 +118,5 @@ export function EditCommand({commandId}: {commandId: string}) {
                 {UNKNOWN_ERROR}
             </div>
         )}
-    </>
+    </div>
 }

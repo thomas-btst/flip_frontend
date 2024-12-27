@@ -62,35 +62,41 @@ export function Product({productId}: {productId: string}) {
             .finally(() => { setLoading(false); })
     }
 
-    return <>
+    return <div className="mx-3">
         {product && (
             <div className="max-w-7xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-6">
                 <div className="flex space-x-6">
                     <img
                         src={product.picture}
                         alt="Product picture"
-                        className="w-2/5 object-cover bg-gray-100 rounded-lg shadow"
+                        className="hidden md:block w-2/5 object-cover bg-gray-100 rounded-lg shadow"
                     />
                     <div className="flex flex-col w-full justify-between space-y-6">
-                        <div className="flex flex-col space-y-3">
+                        <div className="flex flex-col space-y-5">
                             <div className="flex items-center justify-between">
                                 <h1 className="text-2xl font-bold text-gray-800 inline-block">{product.name}</h1>
-                                <span className="float-right ml-4 bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded border border-gray-400">
+                                <span className="ml-4 bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded border border-gray-400">
                                     {ProductTranslation.get(product.type)}
                                 </span>
                             </div>
-                            <p className="text-xl text-red-900 font-semibold ml-auto">{Price.toPrice(product.price)} €</p>
+                            <img
+                                src={product.picture}
+                                alt="Product picture"
+                                className="md:hidden w-3/5 self-center object-cover bg-gray-100 rounded-lg shadow"
+                            />
+                            <div className="self-start flex items-center justify-between w-full">
+                                {auth !== null && quantity !== undefined && quantity.quantity > 0 ?
+                                <CartQuantity productId={product.id} quantity={quantity.quantity} refetch={() => void refetch()} loading={loading} setError={setError} setLoading={setLoading}/>
+                                :
+                                <button onClick={event => { addToCart(event, productId); }} className="flex items-center space-x-2 group">
+                                    <FontAwesomeIcon icon={faCartPlus} className="w-5 h-5 p-2 flex justify-center items-center rounded-md bg-red-600 bg-opacity-95 text-white"/>
+                                    <span className="group-hover:underline">Ajouter au panier</span>
+                                </button>
+                                }
+                                <p className="text-xl text-red-900 font-semibold">{Price.toPrice(product.price)} €</p>
+                            </div>
                         </div>
-                        <div className="self-end">
-                            {auth !== null && quantity !== undefined && quantity.quantity > 0 ?
-                            <CartQuantity productId={product.id} quantity={quantity.quantity} refetch={() => void refetch()} loading={loading} setError={setError} setLoading={setLoading}/>
-                            :
-                            <button onClick={event => { addToCart(event, productId); }} className="flex flex-col items-center space-y-2 group">
-                                <FontAwesomeIcon icon={faCartPlus} className="w-5 h-5 p-2 flex justify-center items-center rounded-md bg-red-600 bg-opacity-95 text-white"/>
-                                <span className="group-hover:underline">Ajouter au panier</span>
-                            </button>
-                            }
-                        </div>
+                        
                     </div>
                 </div>
                 <div>
@@ -112,5 +118,5 @@ export function Product({productId}: {productId: string}) {
                 {UNKNOWN_ERROR}
             </div>
         )}
-    </>
+    </div>
 }

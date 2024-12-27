@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 function SquareLink({icon, to, title, disabled}: {icon: IconProp, to: string, title: string, disabled?: boolean}) {
     return <Link
         to={to}
-        className={`w-64 h-64 pt-10 pb-6 flex flex-col items-center justify-center rounded-lg shadow-lg transition-all space-y-7
+        className={`md:w-64 md:h-64 md:pt-10 md:pb-6 sm:w-52 sm:h-52 sm:pt-6 sm:pb-2 w-40 h-40 pt-4 pb-2 flex flex-col items-center justify-center rounded-lg shadow-lg transition-all md:space-y-7 sm:space-y-4 space-y-2
             ${disabled ? 'bg-slate-100 border-slate-200 cursor-not-allowed' : 'bg-slate-200 border-slate-300 hover:scale-110 hover:bg-slate-300'}`}
     >
         <FontAwesomeIcon className="grow text-white drop-shadow-sm" icon={icon}/>

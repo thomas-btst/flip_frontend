@@ -61,39 +61,41 @@ export function Cart() {
             .finally(() => { setLoading(false) })
     }
 
-    return <>
+    return <div className="mx-3">
         {cart && cart.products.length !== 0 ?
-            <div className="max-w-5xl mx-auto space-y-10 p-10 rounded-lg shadow-lg flex flex-col">
-                <div className="flex justify-between">
-                    <h2 className="text-2xl font-bold">Votre panier</h2>
-                    <div className="space-x-2">
+            <div className="max-w-5xl mx-auto space-y-10 p-10 bg-gray-50 rounded-lg shadow-lg flex flex-col">
+                <div className="flex justify-between space-y-5 space-x-5 items-center">
+                    <h2 className="text-2xl font-bold text-nowrap">Votre panier</h2>
+                    <div className="space-x-2 flex flex-col md:flex-row space-y-4 md:space-y-0 items-baseline md:items-center">
                         <button
                             onClick={event => { clearCart(event); }}
-                            className="bg-slate-200 px-2 py-1 rounded-md"
+                            className="bg-slate-200 px-2 py-1 rounded-md text-nowrap"
                         >Vider le panier</button>
-                        <Link
-                            to="/commands"
-                            className="space-x-2 bg-green-100 px-2 py-1.5 text-green-700 hover:text-green-800 hover:bg-green-200 rounded-md size-6 font-semibold"
-                        >
-                            <FontAwesomeIcon icon={faClockRotateLeft}/>
-                            <span>Historique</span>
-                        </Link>
+                        <div>
+                            <Link
+                                to="/commands"
+                                className="space-x-2 text-nowrap bg-green-100 px-2 py-1.5 text-green-700 hover:text-green-800 hover:bg-green-200 rounded-md size-6 font-semibold"
+                            >
+                                <FontAwesomeIcon icon={faClockRotateLeft}/>
+                                <span>Historique</span>
+                            </Link>
                         </div>
+                    </div>
                 </div>
                 {cart.products.map(product => <div key={product.id} className="border-b border-slate-300 flex space-x-10 pb-10">
-                    <img src={product.picture} className="w-40 rounded-md object-contain"/>
+                    <img src={product.picture} className="w-28 md:w-40 rounded-md object-contain"/>
                     <div className="flex-grow flex flex-col justify-between">
                         <div className="flex justify-between items-center">
                             <h3 className="text-lg">{product.name}</h3>
-                            <div className="flex items-center space-x-3">
+                            <div className="flex flex-col space-y-2 md:flex-row md:space-y-0 items-center md:space-x-3 text-nowrap">
                                 <span>{Price.toPrice(product.price)} €</span>
                                 <button onClick={event => { removeFromCart(event, product.id); }}>
                                     <FontAwesomeIcon icon={faTrashCan} className="w-5 h-5 p-1.5 flex justify-center items-center rounded-md hover:bg-red-500 hover:text-white bg-opacity-60 text-red-600"/>
                                 </button>
                             </div>
                         </div>
-                        <div className="ml-auto flex items-center space-x-5">
-                            <span className="font-semibold text-slate-900">
+                        <div className="ml-auto flex flex-col md:flex-row space-y-3 md:space-y-0 items-center md:space-x-5">
+                            <span className="font-semibold text-slate-900 text-nowrap">
                                 Total: {Price.toPrice(product.price * product.quantity)} €
                             </span>
                             <CartQuantity
@@ -108,7 +110,7 @@ export function Cart() {
                     </div>
                 </div>)}
                 <div className="flex justify-between">
-                    <span className="text-lg font-bold">
+                    <span className="text-lg font-bold text-nowrap">
                         Total: {
                             Price.toPrice(
                                 cart.products.reduce((acc, product) => {
@@ -157,5 +159,5 @@ export function Cart() {
                 {UNKNOWN_ERROR}
             </div>
         )}
-    </>
+    </div>
 }

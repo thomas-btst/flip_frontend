@@ -63,7 +63,7 @@ export function AuthForm(props: AuthFormProps) {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-[url('/bg.jpg')] bg-cover">
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-[url('/bg.jpg')] bg-cover p-3">
             <div className="relative w-full max-w-md p-8 space-y-6 bg-white rounded-md shadow-md bg-opacity-95">
                 <h2 className="text-2xl font-bold text-center">
                     <Link to={props.prev ?? "/"} className={`absolute top-3.5 left-5 ${props.prev? "text-lg" : "text-xl text-gray-800"}`}>

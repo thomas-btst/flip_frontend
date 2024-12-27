@@ -66,7 +66,13 @@ export function ProductPagination({search, types, minPrice, maxPrice}: SearchPar
                         loader={<FontAwesomeIcon key={0} icon={faArrowsRotate} className={`${isFetchingNextPage ? "animate-spin" : ""} w-full text-xl mt-10`}/>}
                     >
                         <Masonry
-                            breakpointCols={5}
+                            breakpointCols={({
+                                default: 5,
+                                1300: 4,
+                                1000: 3,
+                                700: 2,
+                                500: 1,
+                            })}
                             className="flex space-x-5"
                             columnClassName="space-y-5"
                         >
