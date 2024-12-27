@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query"
-import { useAuth } from "../../contexts/AuthContext"
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi"
 import { MouseEvent, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -10,26 +9,21 @@ import { commandStatus } from "../../utils/command"
 import { Link } from "react-router-dom"
 
 export function Command({commandId}: {commandId: string}) {
-    const auth = useAuth()
-
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
 
-    if(!auth)
-        return
-
     const {data: command, isLoading, isError, refetch} = useQuery({
         queryKey: ['command', commandId],
-        queryFn: () => APIAxios(APIRoutes.GETCommand(commandId, auth.token))
+        queryFn: () => APIAxios(APIRoutes.GETCommand(commandId))
     })
 
-    function cancelCommand(event: MouseEvent<HTMLButtonElement>, token: string) {
+    function cancelCommand(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
         if (loading)
             return
         setLoading(true)
         setError(false)
-        APIAxios(APIRoutes.PATCHCancelCommand(commandId, token))
+        APIAxios(APIRoutes.PATCHCancelCommand(commandId))
             .then(() => { void refetch() })
             .catch(() => { setError(true) })
             .finally(() => { setLoading(false) })
@@ -46,7 +40,7 @@ export function Command({commandId}: {commandId: string}) {
                         <span className="italic text-lg">{command.id}</span>
                     </div>
                     {command.status === "PENDING" &&
-                        <button onClick={event => { cancelCommand(event, auth.token); }}>
+                        <button onClick={cancelCommand}>
                             <FontAwesomeIcon icon={faBan} className="size-5 text-red-600" title="Annuler la commande"/>
                         </button>
                     }

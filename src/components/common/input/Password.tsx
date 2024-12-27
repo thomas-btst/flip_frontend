@@ -4,8 +4,8 @@ export function Password(params: InputProps) {
     return (
         <Input
             type="password"
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            title="Doit contenir au moins un nombre, une majuscule, une minuscule, et 8 charactères."
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$"
+            title="Doit contenir au moins un nombre, une majuscule, une minuscule, un charactère spécial et 12 charactères."
             {...params}
             required
         />

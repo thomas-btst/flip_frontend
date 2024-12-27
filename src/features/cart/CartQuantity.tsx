@@ -3,14 +3,13 @@ import { MouseEvent } from "react"
 import { APIAxios, APIRoutes } from "../../api/FlipApi"
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons"
 
-export function CartQuantity({productId, quantity, loading, setLoading, setError, refetch, token}: {
+export function CartQuantity({productId, quantity, loading, setLoading, setError, refetch}: {
     productId: string,
     quantity: number,
     loading?: boolean,
     setLoading?: (value: boolean) => void,
     setError?: (value: boolean) => void,
     refetch: () => void,
-    token: string,
 }) {
     function setQuantity(event: MouseEvent<HTMLButtonElement>, productId: string, quantity: number) {
         event.preventDefault()
@@ -20,7 +19,7 @@ export function CartQuantity({productId, quantity, loading, setLoading, setError
             setLoading(true)
         if (setError)
             setError(false)
-        APIAxios(APIRoutes.PATCHCart(productId, quantity, token))
+        APIAxios(APIRoutes.PATCHCart(productId, quantity))
             .then(() => {refetch()})
             .catch(() => {if (setError) setError(true)})
             .finally(() => {if (setLoading) setLoading(false)})

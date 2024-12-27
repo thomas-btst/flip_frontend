@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ProductTranslation } from "../../api/dto/Product"
 import { Price } from "../../utils/price"
 import { CartQuantity } from "../cart/CartQuantity"
-import { useAuth } from "../../contexts/AuthContext"
 import { CartQuantityDto } from "../../api/dto/CartDto"
 import { MouseEvent, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { AxiosError } from "axios"
 import { NotFound } from "../../pages/NotFound"
+import { useAuth } from "../../contexts/AuthContext"
 
 export function Product({productId}: {productId: string}) {
     const auth = useAuth()
@@ -38,7 +38,7 @@ export function Product({productId}: {productId: string}) {
 
     const {data: quantity, isLoading: isLoadingQuantity, isError: isErrorQuantity, refetch} = useQuery<CartQuantityDto>({
         queryKey: ["cart quantity", productId],
-        queryFn: () => auth ? APIAxios(APIRoutes.GETCartQuantity(productId, auth.token)) : new Promise<CartQuantityDto>(resolve => { resolve({quantity: 0}); })
+        queryFn: () => auth ? APIAxios(APIRoutes.GETCartQuantity(productId)) : new Promise<CartQuantityDto>(resolve => { resolve({quantity: 0}); })
     })
 
     const NotFoundComponent = useMemo(() => <NotFound/>, [])
@@ -56,7 +56,7 @@ export function Product({productId}: {productId: string}) {
         }
         setLoading(true)
         setError(false)
-        APIAxios(APIRoutes.PATCHCart(productId, 1, auth.token))
+        APIAxios(APIRoutes.PATCHCart(productId, 1))
             .then(() => void refetch())
             .catch(() => { setError(true); })
             .finally(() => { setLoading(false); })
@@ -83,7 +83,7 @@ export function Product({productId}: {productId: string}) {
                         </div>
                         <div className="self-end">
                             {auth !== null && quantity !== undefined && quantity.quantity > 0 ?
-                            <CartQuantity productId={product.id} quantity={quantity.quantity} token={auth.token} refetch={() => void refetch()} loading={loading} setError={setError} setLoading={setLoading}/>
+                            <CartQuantity productId={product.id} quantity={quantity.quantity} refetch={() => void refetch()} loading={loading} setError={setError} setLoading={setLoading}/>
                             :
                             <button onClick={event => { addToCart(event, productId); }} className="flex flex-col items-center space-y-2 group">
                                 <FontAwesomeIcon icon={faCartPlus} className="w-5 h-5 p-2 flex justify-center items-center rounded-md bg-red-600 bg-opacity-95 text-white"/>

@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate, faFloppyDisk, faImage, faPenToSquare, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { InputNumber } from "../../../components/common/input/Number";
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../../api/FlipApi";
-import { useAuth } from "../../../contexts/AuthContext";
-import { throwError } from "../../../utils/throw";
 import { Price } from "../../../utils/price";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../../../components/common/input/Input";
@@ -21,7 +19,6 @@ export function CreateOrEditProduct({product}: {product?: ProductDto}) {
     const [error, setError] = useState<string>()
     const [loading, setLoading] = useState(false)
 
-    const auth = useAuth() ?? throwError("Not authenticated")
     const navigate = useNavigate()
 
     function handlePicture(event: ChangeEvent<HTMLInputElement>) {
@@ -55,10 +52,9 @@ export function CreateOrEditProduct({product}: {product?: ProductDto}) {
             APIAxios(APIRoutes.PUTProduct(
                 product.id,
                 productDto,
-                auth.token,
             )).then(async () => {
                 if (picture)
-                    await APIAxios(APIRoutes.PUTProductPicture(product.id, picture, auth.token))
+                    await APIAxios(APIRoutes.PUTProductPicture(product.id, picture))
                 navigate(`/product/${encodeURIComponent(product.id)}`)
             }).catch(() => { setError(UNKNOWN_ERROR); })
                 .finally(() => { setLoading(false); })
@@ -71,7 +67,6 @@ export function CreateOrEditProduct({product}: {product?: ProductDto}) {
             APIAxios(APIRoutes.POSTProduct(
                 productDto,
                 picture,
-                auth.token,
             )).then(productId => { navigate(`/product/${encodeURIComponent(productId)}`); })
                 .catch(() => { setError(UNKNOWN_ERROR); })
                 .finally(() => { setLoading(false); })   

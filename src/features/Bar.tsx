@@ -4,9 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../components/common/input/Input";
 import { faCartShopping, faScrewdriverWrench, faSearch, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { getSearchProductUrl } from "./product/search/ProductsPagination";
-import { useAuth } from "../contexts/AuthContext";
 import { useDebounce } from "../hooks/useDebounce";
 import { ProductType } from "../api/dto/Product";
+import { useAuth } from "../contexts/AuthContext";
 
 export interface SearchParams {
     search?: string,

@@ -1,12 +1,12 @@
-import { AuthState, useAuthLogout } from "../contexts/AuthContext"
 import { useQuery } from "@tanstack/react-query"
-import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../api/FlipApi"
+import { APIRoutes, UNKNOWN_ERROR, APIAxios } from "../api/FlipApi"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowsRotate, faFloppyDisk, faKey, faPenToSquare, faRightFromBracket, faUserCircle } from "@fortawesome/free-solid-svg-icons"
 import { ChangeEvent, FormEvent, MouseEvent, ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Input } from "../components/common/input/Input"
 import { UserDto } from "../api/dto/User"
+import { useAuthLogout } from "../contexts/AuthContext"
 
 function ProfileItem({id, title, children}: {id?: string, title: string, children: ReactNode}) {
     return <div className="flex items-center relative">
@@ -47,9 +47,9 @@ function ProfileInputItem({id, title, value, onChange, inputTitle, type, pattern
     </ProfileItem>
 }
 
-export function Profile({auth}: {auth: AuthState}) {
-    const logout = useAuthLogout()
+export function Profile() {
     const navigate = useNavigate()
+    const logout = useAuthLogout()
 
     const [error, setError] = useState(false)
     const [saveLoading, setSaveLoading] = useState(false)
@@ -64,8 +64,8 @@ export function Profile({auth}: {auth: AuthState}) {
     const [phone, setPhone] = useState("")
 
     const {data: user, isLoading, isError, refetch} = useQuery({
-        queryKey: ['account', auth.token], 
-        queryFn: () => APIAxios(APIRoutes.GETUserProfile(auth.token)).then(user => ({
+        queryKey: ['account'], 
+        queryFn: () => APIAxios(APIRoutes.GETUserProfile()).then(user => ({
             ...user,
             logo: user.logo ? `${user.logo}?${new Date().getTime().toString()}` : undefined
         })),
@@ -94,7 +94,7 @@ export function Profile({auth}: {auth: AuthState}) {
                 zipCode,
                 city,
             },
-        }, auth.token))
+        }))
             .then(async () => {await refetch()})
             .catch(() => { setError(true); })
             .finally(() => { setSaveLoading(false); })
@@ -117,7 +117,7 @@ export function Profile({auth}: {auth: AuthState}) {
             return
         setError(false)
         setLogoLoading(true)
-        void APIAxios(APIRoutes.PUTUserLogo(files[0], auth.token))
+        void APIAxios(APIRoutes.PUTUserLogo(files[0]))
             .then(() => refetch())
             .catch(() => { setError(true); })
             .finally(() => { setLogoLoading(false); })
@@ -193,7 +193,7 @@ export function Profile({auth}: {auth: AuthState}) {
                             }
                         </div>
                         <button
-                            onClick={logout}
+                            onClick={() => {void APIAxios(APIRoutes.POSTLogout()); logout()}}
                             type="button"
                             className="text-red-600 hover:text-red-800 transition w-full text-right"
                             title="Se déconnecter"

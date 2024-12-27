@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query"
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../../api/FlipApi"
 import { Price } from "../../../utils/price"
 import { Input } from "../../../components/common/input/Input"
-import { useAuth } from "../../../contexts/AuthContext"
 import ReactPaginate from 'react-paginate'
 import { useNavigate } from "react-router-dom"
 
@@ -18,7 +17,6 @@ export function AdminProducts() {
     const [page, setPage] = useState(0)
     const [error, setError] = useState(false)
 
-    const auth = useAuth()
     const navigate = useNavigate()
 
     const {data: products, isError, isLoading, isFetching, refetch} = useQuery<ProductPageDto>({
@@ -26,9 +24,6 @@ export function AdminProducts() {
         queryFn: () => APIAxios(APIRoutes.GETProductsByPage(25, page, {search, type})),
         keepPreviousData: true,
     })
-
-    if (!auth)
-        return
 
     if (products && products.pages <= page)
         setPage(products.pages - 1)
@@ -38,10 +33,10 @@ export function AdminProducts() {
         void refetch()
     }
 
-    function handleDeleteProduct(event: MouseEvent<HTMLButtonElement>, productId: string, bearer: string) {
+    function handleDeleteProduct(event: MouseEvent<HTMLButtonElement>, productId: string) {
         event.preventDefault()
         setError(false)
-        APIAxios(APIRoutes.DELETEProduct(productId, bearer))
+        APIAxios(APIRoutes.DELETEProduct(productId))
             .then(() => refetch())
             .catch(() => { setError(true); })
     }
@@ -154,7 +149,7 @@ export function AdminProducts() {
                                         </button>
                                         <button
                                             className="inline-block font-medium text-red-600 hover:underline text-nowrap space-x-1"
-                                            onClick={event => { handleDeleteProduct(event, product.id, auth.token) }}
+                                            onClick={event => { handleDeleteProduct(event, product.id) }}
                                         >
                                             <FontAwesomeIcon icon={faTrashCan}/>
                                             <span>Supprimer</span>

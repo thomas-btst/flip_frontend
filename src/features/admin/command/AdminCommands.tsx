@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query"
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../../api/FlipApi"
 import { Price } from "../../../utils/price"
 import { Input } from "../../../components/common/input/Input"
-import { useAuth } from "../../../contexts/AuthContext"
 import ReactPaginate from 'react-paginate'
 import { useNavigate } from "react-router-dom"
 import { CommandPageDto, CommandStatus, CommandTranslation } from "../../../api/dto/CommandDto"
@@ -18,15 +17,11 @@ export function AdminCommands() {
     const [status, setStatus] = useState<CommandStatus>()
     const [page, setPage] = useState(0)
 
-    const auth = useAuth()
     const navigate = useNavigate()
-
-    if (!auth)
-        return
 
     const {data: commands, isError, isLoading, isFetching, refetch} = useQuery<CommandPageDto>({
         queryKey: ['commands', status, page],
-        queryFn: () => APIAxios(APIRoutes.GETCommandPage(25, page, search, status, auth.token)),
+        queryFn: () => APIAxios(APIRoutes.GETCommandPage(25, page, search, status)),
         keepPreviousData: true,
     })
 

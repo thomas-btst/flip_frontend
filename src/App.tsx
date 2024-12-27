@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { NotFound } from "./pages/NotFound";
-import { AuthProvider, useAuth, useIsAuthenticated } from "./contexts/AuthContext";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { AccountPage } from "./pages/AccountPage";
@@ -22,9 +21,10 @@ import { CommandsPage } from "./pages/command/CommandsPage";
 import { CommandPage } from "./pages/command/CommandPage";
 import { AdminCommandsPage } from "./pages/admin/AdminCommandsPage";
 import { AdminEditCommandPage } from "./pages/admin/AdminEditCommandPage";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 function AuthenticatedRoute() {
-    if (useIsAuthenticated())
+    if (useAuth() !== null)
         return <Outlet/>
     return <Navigate to='/login'/>
 }

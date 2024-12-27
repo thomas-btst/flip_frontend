@@ -1,13 +1,12 @@
 import { FormEvent, MouseEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi";
-import { useAuthSet } from "../../contexts/AuthContext";
 import { AxiosError } from "axios";
 import { AuthForm } from "./AuthForm";
+import { useAuthSet } from "../../contexts/AuthContext";
 
 export function ResetPassword({email}: {email: string}) {
     const navigate = useNavigate()
-
     const setAuth = useAuthSet()
 
     const [loading, setLoading] = useState(false)

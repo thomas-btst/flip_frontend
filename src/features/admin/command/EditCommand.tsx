@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useAuth } from "../../../contexts/AuthContext"
 import { useQuery } from "@tanstack/react-query"
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../../api/FlipApi"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -13,25 +12,20 @@ import { CommandStatus } from "../../../api/dto/CommandDto"
 import Select from 'react-select'
 
 export function EditCommand({commandId}: {commandId: string}) {
-    const auth = useAuth()
-
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
 
-    if(!auth)
-        return
-
     const {data: command, isLoading, isError, refetch} = useQuery({
         queryKey: ['admin', 'command', commandId],
-        queryFn: () => APIAxios(APIRoutes.GETAdminCommand(commandId, auth.token))
+        queryFn: () => APIAxios(APIRoutes.GETAdminCommand(commandId))
     })
 
-    function handleChangeStatus(status: CommandStatus, token: string) {
+    function handleChangeStatus(status: CommandStatus) {
         if (loading)
             return
         setLoading(true)
         setError(false)
-        APIAxios(APIRoutes.PATCHCommandStatus(commandId, status, token))
+        APIAxios(APIRoutes.PATCHCommandStatus(commandId, status))
             .then(() => refetch())
             .catch(() => { setError(true); })
             .finally(() => { setLoading(false); })
@@ -49,7 +43,7 @@ export function EditCommand({commandId}: {commandId: string}) {
                     </div>
                     <Select
                         value={selectCommandStatusOptions.find(option => option.value === command.status)}
-                        onChange={options => {if (options) handleChangeStatus(options.value, auth.token)}}
+                        onChange={options => {if (options) handleChangeStatus(options.value)}}
                         className="w-1/2"
                         isSearchable={true}
                         options={selectCommandStatusOptions as {value: CommandStatus, label: string}[]}

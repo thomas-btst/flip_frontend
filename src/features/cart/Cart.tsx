@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query"
-import { useAuth } from "../../contexts/AuthContext"
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi"
 import { faArrowRightLong, faArrowsRotate, faClockRotateLeft, faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -10,52 +9,48 @@ import { Link, useNavigate } from "react-router-dom"
 import { AxiosError } from "axios"
 
 export function Cart() {
-    const auth = useAuth()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
     const [address, setAddress] = useState(false)
     const navigate = useNavigate()
 
-    if (!auth)
-        return
-
     const {data: cart, isLoading, isError, refetch} = useQuery({
-        queryKey: ['cart', auth.token],
-        queryFn: () => APIAxios(APIRoutes.GETCart(auth.token))
+        queryKey: ['cart'],
+        queryFn: () => APIAxios(APIRoutes.GETCart())
     })
 
-    function removeFromCart(event: MouseEvent<HTMLButtonElement>, productId: string, token: string) {
+    function removeFromCart(event: MouseEvent<HTMLButtonElement>, productId: string) {
         event.preventDefault()
         if (loading)
             return
         setLoading(true)
         setError(false)
-        APIAxios(APIRoutes.DELETECartProduct(productId, token))
+        APIAxios(APIRoutes.DELETECartProduct(productId))
             .then(() => {void refetch()})
             .catch(() => {setError(true)})
             .finally(() => { setLoading(false); })
     }
 
-    function clearCart(event: MouseEvent<HTMLButtonElement>, token :string) {
+    function clearCart(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
         if (loading)
             return
         setLoading(true)
         setError(false)
-        APIAxios(APIRoutes.DELETECart(token))
+        APIAxios(APIRoutes.DELETECart())
             .then(() => {void refetch()})
             .catch(() => {setError(true)})
             .finally(() => { setLoading(false); })
     }
 
-    function command(event: MouseEvent<HTMLButtonElement>, token: string) {
+    function command(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
         if (loading)
             return
         setLoading(true)
         setAddress(false)
         setError(false)
-        APIAxios(APIRoutes.POSTCommand(token))
+        APIAxios(APIRoutes.POSTCommand())
             .then(commandId => {navigate(`/command/${commandId}`)})
             .catch(e => {
                 if (e instanceof AxiosError && e.status === 409)
@@ -73,7 +68,7 @@ export function Cart() {
                     <h2 className="text-2xl font-bold">Votre panier</h2>
                     <div className="space-x-2">
                         <button
-                            onClick={event => { clearCart(event, auth.token); }}
+                            onClick={event => { clearCart(event); }}
                             className="bg-slate-200 px-2 py-1 rounded-md"
                         >Vider le panier</button>
                         <Link
@@ -92,7 +87,7 @@ export function Cart() {
                             <h3 className="text-lg">{product.name}</h3>
                             <div className="flex items-center space-x-3">
                                 <span>{Price.toPrice(product.price)} €</span>
-                                <button onClick={event => { removeFromCart(event, product.id, auth.token); }}>
+                                <button onClick={event => { removeFromCart(event, product.id); }}>
                                     <FontAwesomeIcon icon={faTrashCan} className="w-5 h-5 p-1.5 flex justify-center items-center rounded-md hover:bg-red-500 hover:text-white bg-opacity-60 text-red-600"/>
                                 </button>
                             </div>
@@ -108,7 +103,6 @@ export function Cart() {
                                 setLoading={setLoading}
                                 setError={setError}
                                 refetch={() => void refetch()}
-                                token={auth.token}
                             />
                         </div>
                     </div>
@@ -124,7 +118,7 @@ export function Cart() {
                         }
                     </span>
                     <button
-                        onClick={event => { command(event, auth.token); }}
+                        onClick={command}
                         className="bg-red-500 text-white rounded-md px-2 py-1 font-bold hover:bg-red-600"
                     >Commander</button>
                 </div>

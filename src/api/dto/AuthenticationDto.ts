@@ -13,7 +13,8 @@ export interface RegisterDto {
 }
 
 export interface TokenDto {
-    token: string,
+    accessToken: string,
+    refreshToken: string,
     roles: RoleEnum[],
 }
 
@@ -26,4 +27,8 @@ export interface ResetPasswordDto {
 export interface ActivationDto {
     email: string,
     activationKey: string,
+}
+
+export interface AccessTokenDto {
+    accessToken: string,
 }

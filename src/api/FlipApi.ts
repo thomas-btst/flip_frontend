@@ -1,9 +1,10 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto";
-import { UpdateUserDto, UserDto } from "./dto/User";
-import { CreateProductDto, ProductPageDto, ProductDto, ProductPaginationDto, ProductType, UpdateProductDto } from "./dto/Product";
-import { CartDto, CartQuantityDto } from "./dto/CartDto";
-import { CommandDto, CommandPageDto, CommandStatus, ShortCommandDto } from "./dto/CommandDto";
+import axios, { AxiosError, AxiosRequestConfig } from "axios"
+import { AccessTokenDto, ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto"
+import { UpdateUserDto, UserDto } from "./dto/User"
+import { CreateProductDto, ProductPageDto, ProductDto, ProductPaginationDto, ProductType, UpdateProductDto } from "./dto/Product"
+import { CartDto, CartQuantityDto } from "./dto/CartDto"
+import { CommandDto, CommandPageDto, CommandStatus, ShortCommandDto } from "./dto/CommandDto"
+import { AuthStore } from "../utils/storage"
 
 type EmptyBody = ""
 
@@ -11,19 +12,40 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
 export type RequestConfig<_> = AxiosRequestConfig & {
     method?: HttpMethod,
-    bearer?: string,
+    bearer?: boolean,
 }
 
 export const UNKNOWN_ERROR = "Une erreur inconnue est survenue. Merci de réessayer plus tard."
 
+axios.interceptors.response.use(
+    (response) => response,
+    async (error: AxiosError & {config: {_retry: boolean}}) => {
+        const originalRequest = error.config
+        const token = AuthStore.get()
+        if (token !== null && error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true
+            try {
+                const response = await APIAxios(APIRoutes.POSTRefreshToken(token.refreshToken, token.accessToken))
+                AuthStore.set({...token, accessToken: response.accessToken})
+                originalRequest.headers.Authorization = `Bearer ${response.accessToken}`
+                return await axios(originalRequest)
+            } catch {
+                localStorage.removeItem('token')
+            }
+        }
+        return Promise.reject(error)
+    }
+)
+
 export function APIAxios<T>({bearer, ...config}: RequestConfig<T>, setLoading?: (loading: boolean) => void): Promise<T> {
+    const auth = AuthStore.get()
     if(setLoading)
         setLoading(true)
     return axios<T>({
         ...config,
         headers: {
             ...config.headers,
-            ...(bearer ? {Authorization: `Bearer ${bearer}`} : {})
+            ...(bearer && auth ? {Authorization: `Bearer ${auth.accessToken}`} : {})
         }
     }).then(response => response.data)
         .finally(() => {
@@ -45,20 +67,20 @@ export const APIRoutes = {
         data: loginDto,
     }),
 
-    GETUserProfile: (bearer: string): RequestConfig<UserDto> => ({
+    GETUserProfile: (): RequestConfig<UserDto> => ({
         method: "GET",
         url: "/api/users",
-        bearer,
+        bearer: true,
     }),
 
-    PUTUserProfile: (profile: UpdateUserDto, bearer: string): RequestConfig<EmptyBody> => ({
+    PUTUserProfile: (profile: UpdateUserDto): RequestConfig<EmptyBody> => ({
         method: "PUT",
         url: "/api/users",
-        bearer,
+        bearer: true,
         data: profile,
     }),
 
-    PUTUserLogo: (logo: File, bearer: string): RequestConfig<EmptyBody> => {
+    PUTUserLogo: (logo: File): RequestConfig<EmptyBody> => {
         const formData = new FormData()
         formData.append("logo", logo)
         return {
@@ -66,7 +88,7 @@ export const APIRoutes = {
             url: "/api/users/logo",
             headers: {"Content-Type": "multipart/form-data"},
             data: formData,
-            bearer,
+            bearer: true,
         }
     },
 
@@ -120,7 +142,7 @@ export const APIRoutes = {
         url: `/api/public/products/${encodeURIComponent(productId)}`
     }),
 
-    POSTProduct: (productDto: CreateProductDto, picture: File, bearer: string): RequestConfig<string> => {
+    POSTProduct: (productDto: CreateProductDto, picture: File): RequestConfig<string> => {
         const formData = new FormData()
         formData.append("productDto", new Blob(
             [JSON.stringify(productDto)],
@@ -132,20 +154,20 @@ export const APIRoutes = {
             url: "/api/products",
             headers: {"Content-Type": "multipart/form-data"},
             data: formData,
-            bearer,
+            bearer: true,
         }
     },
 
-    PUTProduct: (productId: string, productDto: UpdateProductDto, bearer: string): RequestConfig<string> => {
+    PUTProduct: (productId: string, productDto: UpdateProductDto): RequestConfig<string> => {
         return {
             method: "PUT",
             url: `/api/products/${encodeURIComponent(productId)}`,
             data: productDto,
-            bearer,
+            bearer: true,
         }
     },
 
-    PUTProductPicture: (productId: string, picture: File, bearer: string): RequestConfig<string> => {
+    PUTProductPicture: (productId: string, picture: File): RequestConfig<string> => {
         const formData = new FormData()
         formData.append("picture", picture)
         return {
@@ -153,93 +175,111 @@ export const APIRoutes = {
             url: `/api/products/${encodeURIComponent(productId)}/picture`,
             headers: {"Content-Type": "multipart/form-data"},
             data: formData,
-            bearer,
+            bearer: true,
         }
     },
 
-    DELETEProduct: (productId: string, bearer: string): RequestConfig<EmptyBody> => ({
+    DELETEProduct: (productId: string): RequestConfig<EmptyBody> => ({
         method: "DELETE",
         url: `/api/products/${encodeURIComponent(productId)}`,
-        bearer,
+        bearer: true,
     }),
 
-    GETCart: (bearer: string): RequestConfig<CartDto> => ({
+    GETCart: (): RequestConfig<CartDto> => ({
         method: "GET",
         url: "/api/carts",
-        bearer,
+        bearer: true,
     }),
 
-    GETCartQuantity: (productId: string, bearer: string): RequestConfig<CartQuantityDto> => ({
+    GETCartQuantity: (productId: string): RequestConfig<CartQuantityDto> => ({
         method: "GET",
         url: `/api/carts/${encodeURIComponent(productId)}/quantity`,
-        bearer,
+        bearer: true,
     }),
 
-    PATCHCart: (productId: string, quantity: number, bearer: string): RequestConfig<EmptyBody> => ({
+    PATCHCart: (productId: string, quantity: number): RequestConfig<EmptyBody> => ({
         method: "PATCH",
         url: `/api/carts/${encodeURIComponent(productId)}`,
         data: {quantity},
-        bearer,
+        bearer: true,
     }),
 
-    DELETECartProduct: (productId: string, bearer: string): RequestConfig<EmptyBody> => ({
+    DELETECartProduct: (productId: string): RequestConfig<EmptyBody> => ({
         method: "DELETE",
         url: `/api/carts/${encodeURIComponent(productId)}`,
-        bearer,
+        bearer: true,
     }),
 
-    DELETECart: (bearer: string): RequestConfig<EmptyBody> => ({
+    DELETECart: (): RequestConfig<EmptyBody> => ({
         method: "DELETE",
         url: "/api/carts",
-        bearer,
+        bearer: true,
     }),
 
-    POSTCommand: (bearer: string): RequestConfig<string> => ({
+    POSTCommand: (): RequestConfig<string> => ({
         method: "POST",
         url: "/api/commands",
-        bearer,
+        bearer: true,
     }),
 
-    GETCommands: (bearer: string): RequestConfig<ShortCommandDto[]> => ({
+    GETCommands: (): RequestConfig<ShortCommandDto[]> => ({
         method: "GET",
         url: "/api/commands",
-        bearer,
+        bearer: true,
     }),
 
-    GETCommand: (commandId: string, bearer: string): RequestConfig<CommandDto> => ({
+    GETCommand: (commandId: string): RequestConfig<CommandDto> => ({
         method: "GET",
         url: `/api/commands/${encodeURIComponent(commandId)}`,
-        bearer,
+        bearer: true,
     }),
 
-    GETAdminCommand: (commandId: string, bearer: string): RequestConfig<CommandDto> => ({
+    GETAdminCommand: (commandId: string): RequestConfig<CommandDto> => ({
         method: "GET",
         url: `/api/commands/admin/${encodeURIComponent(commandId)}`,
-        bearer,
+        bearer: true,
     }),
 
-    PATCHCancelCommand: (commandId: string, bearer: string): RequestConfig<EmptyBody> => ({
+    PATCHCancelCommand: (commandId: string): RequestConfig<EmptyBody> => ({
         method: "PATCH",
         url: `/api/commands/${encodeURIComponent(commandId)}/cancel`,
-        bearer,
+        bearer: true,
     }),
 
-    GETCommandPage: (limit: number, page: number, search: string, status: CommandStatus | undefined, bearer: string): RequestConfig<CommandPageDto> => ({
+    GETCommandPage: (limit: number, page: number, search: string, status: CommandStatus | undefined): RequestConfig<CommandPageDto> => ({
         method: "GET",
         url: `/api/commands/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
         params: {
             search,
             status,
         },
-        bearer,
+        bearer: true,
     }),
 
-    PATCHCommandStatus: (commandId: string, status: CommandStatus, bearer: string): RequestConfig<EmptyBody> => ({
+    PATCHCommandStatus: (commandId: string, status: CommandStatus): RequestConfig<EmptyBody> => ({
         method: "PATCH",
         url: `/api/commands/${encodeURIComponent(commandId)}`,
         data: {
             status,
         },
-        bearer,
+        bearer: true,
+    }),
+
+    POSTRefreshToken: (refreshToken: string, accessToken: string): RequestConfig<AccessTokenDto> => ({
+        method: "POST", 
+        url: `/api/auth/token/refresh`,
+        data: {
+            refreshToken,
+            accessToken,
+        },
+    }),
+
+    POSTLogout: (): RequestConfig<AccessTokenDto> => ({
+        method: "POST",
+        url: '/api/auth/logout',
+        data: {
+            refreshToken: AuthStore.get()?.refreshToken,
+            accessToken: AuthStore.get()?.accessToken,
+        }  
     })
 }

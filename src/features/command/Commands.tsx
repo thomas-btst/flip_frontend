@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query"
-import { useAuth } from "../../contexts/AuthContext"
 import { APIAxios, APIRoutes } from "../../api/FlipApi"
 import { formatDate } from "../../utils/date"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -8,12 +7,9 @@ import { Link } from "react-router-dom"
 import { commandStatus } from "../../utils/command"
 
 export function Commands() {
-    const auth = useAuth()
-    if (!auth)
-        return
     const {data: commands} = useQuery({
-        queryKey: ['commands', auth.token],
-        queryFn: () => APIAxios(APIRoutes.GETCommands(auth.token))
+        queryKey: ['commands'],
+        queryFn: () => APIAxios(APIRoutes.GETCommands())
     })
     return <section className="max-w-5xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-6">
         <h2 className="text-2xl font-bold">Commandes</h2>

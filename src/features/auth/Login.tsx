@@ -1,11 +1,12 @@
 import { FormEvent, useState } from "react";
-import { useAuthSet } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi";
 import { AxiosError } from "axios";
 import { AuthForm } from "./AuthForm";
+import { useAuthSet } from "../../contexts/AuthContext";
 
 export function Login() {
+    const setAuth = useAuthSet()
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -13,7 +14,6 @@ export function Login() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const setAuth = useAuthSet()
     const navigate = useNavigate()
 
     function login(event: FormEvent<HTMLFormElement>){

@@ -2,17 +2,18 @@ import { FormEvent, MouseEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi";
 import { AxiosError } from "axios";
-import { useAuthSet } from "../../contexts/AuthContext";
 import { AuthForm } from "./AuthForm";
+import { useAuthSet } from "../../contexts/AuthContext";
 
 export function Activate({email}: {email: string}) {
+    const setAuth = useAuthSet()
+
     const [code, setCode] = useState("")
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
     const navigate = useNavigate()
-    const setAuth = useAuthSet()
 
     function activate(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
