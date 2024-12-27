@@ -30,7 +30,7 @@ axios.interceptors.response.use(
                 originalRequest.headers.Authorization = `Bearer ${response.accessToken}`
                 return await axios(originalRequest)
             } catch {
-                localStorage.removeItem('token')
+                AuthStore.unset()
             }
         }
         return Promise.reject(error)

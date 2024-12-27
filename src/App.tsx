@@ -22,6 +22,7 @@ import { CommandPage } from "./pages/command/CommandPage";
 import { AdminCommandsPage } from "./pages/admin/AdminCommandsPage";
 import { AdminEditCommandPage } from "./pages/admin/AdminEditCommandPage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { ContactPage } from "./pages/ContactPage";
 
 function AuthenticatedRoute() {
     if (useAuth() !== null)
@@ -54,6 +55,7 @@ export default function App() {
 
                             <Route element={<Layout/>}>
                                 <Route path='' element={<HomePage/>}/>
+                                <Route path='contact' element={<ContactPage/>}/>
                                 <Route path='product/:productId' element={<ProductPage/>}/>
                                 <Route element={<AuthenticatedRoute/>}>
                                     <Route path='account' element={<AccountPage/>}/>
