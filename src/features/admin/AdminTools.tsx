@@ -15,10 +15,10 @@ function SquareLink({icon, to, title, disabled}: {icon: IconProp, to: string, ti
 }
 
 export function AdminTools() {
-    return <div className="mt-10 flex flex-col items-center justify-center">
+    return <div className="mt-10 mb-16 flex flex-col items-center justify-center">
         <div className="grid grid-cols-2 gap-7">
             <SquareLink icon={faCartShopping} title="Produits" to="products"/>
-            <SquareLink icon={faUser} title="Clients" to="users" disabled/>
+            <SquareLink icon={faUser} title="Clients" to="users"/>
             <SquareLink icon={faFileLines} title="Commandes" to="commands"/>
             <SquareLink icon={faChartSimple} title="Statistiques" to="stats" disabled/>
         </div>

@@ -54,7 +54,7 @@ export function CreateOrEditProduct({product}: {product?: ProductDto}) {
                 productDto,
             )).then(async () => {
                 if (picture)
-                    await APIAxios(APIRoutes.PUTProductPicture(product.id, picture))
+                    await APIAxios(APIRoutes.PATCHProductPicture(product.id, picture))
                 navigate(`/product/${encodeURIComponent(product.id)}`)
             }).catch(() => { setError(UNKNOWN_ERROR); })
                 .finally(() => { setLoading(false); })

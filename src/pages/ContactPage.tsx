@@ -4,13 +4,13 @@ export function ContactPage() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-gray-900">Contactez-nous</h2>
-                    <p className="mt-4 text-lg text-gray-700">Vous avez une question ou besoin d'aide ? N'hésitez pas à nous contacter !</p>
+                    <p className="mt-4 text-lg text-gray-700">Vous avez une question ou besoin d&apos;aide ? N&apos;hésitez pas à nous contacter !</p>
                 </div>
                 
                 <div className="lg:w-1/2 mt-12 lg:mt-0 text-center mx-auto">
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">Nos Informations</h3>
                     <p className="text-lg text-gray-700 mb-4">
-                        <strong>Adresse :</strong> <a target="_blank" href="https://maps.app.goo.gl/1hJo4bHsBVCkFZXg9" className="hover:underline text-red-700">123 Rue du Skate, 13000 Marseille, France</a>
+                        <strong>Adresse :</strong> <a target="_blank" href="https://maps.app.goo.gl/1hJo4bHsBVCkFZXg9" className="hover:underline text-red-700" rel="noreferrer">123 Rue du Skate, 13000 Marseille, France</a>
                     </p>
                     <p className="text-lg text-gray-700 mb-4">
                         <strong>Téléphone :</strong> <a className="hover:underline text-red-700" href="tel:0909090909">0909090909</a>

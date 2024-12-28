@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios"
 import { AccessTokenDto, ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto"
-import { UpdateUserDto, UserDto } from "./dto/User"
+import { ShortUserDto, UpdateUserDto, UserDto, UserPageDto } from "./dto/User"
 import { CreateProductDto, ProductPageDto, ProductDto, ProductPaginationDto, ProductType, UpdateProductDto } from "./dto/Product"
 import { CartDto, CartQuantityDto } from "./dto/CartDto"
 import { CommandDto, CommandPageDto, CommandStatus, ShortCommandDto } from "./dto/CommandDto"
@@ -73,6 +73,12 @@ export const APIRoutes = {
         bearer: true,
     }),
 
+    GETUser: (userId: string): RequestConfig<ShortUserDto> => ({
+        method: "GET",
+        url: `/api/users/${encodeURIComponent(userId)}`,
+        bearer: true,
+    }),
+
     PUTUserProfile: (profile: UpdateUserDto): RequestConfig<EmptyBody> => ({
         method: "PUT",
         url: "/api/users",
@@ -80,11 +86,11 @@ export const APIRoutes = {
         data: profile,
     }),
 
-    PUTUserLogo: (logo: File): RequestConfig<EmptyBody> => {
+    PATCHUserLogo: (logo: File): RequestConfig<EmptyBody> => {
         const formData = new FormData()
         formData.append("logo", logo)
         return {
-            method: "PUT",
+            method: "PATCH",
             url: "/api/users/logo",
             headers: {"Content-Type": "multipart/form-data"},
             data: formData,
@@ -101,6 +107,13 @@ export const APIRoutes = {
         method: "POST",
         url: "/api/auth/activate",
         data: activationDto,
+    }),
+
+    GETUsersByPage: (limit: number, page: number, search: string): RequestConfig<UserPageDto> => ({
+        method: "GET",
+        url: `/api/users/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
+        params: {search},
+        bearer: true,
     }),
 
     POSTSendResetPasswordKey: (email: string): RequestConfig<EmptyBody> => ({
@@ -167,11 +180,11 @@ export const APIRoutes = {
         }
     },
 
-    PUTProductPicture: (productId: string, picture: File): RequestConfig<string> => {
+    PATCHProductPicture: (productId: string, picture: File): RequestConfig<string> => {
         const formData = new FormData()
         formData.append("picture", picture)
         return {
-            method: "PUT",
+            method: "PATCH",
             url: `/api/products/${encodeURIComponent(productId)}/picture`,
             headers: {"Content-Type": "multipart/form-data"},
             data: formData,
@@ -228,6 +241,12 @@ export const APIRoutes = {
         bearer: true,
     }),
 
+    GETCommandsForUser: (userId: string): RequestConfig<ShortCommandDto[]> => ({
+        method: "GET",
+        url: `/api/commands/users/${encodeURIComponent(userId)}`,
+        bearer: true,
+    }),
+
     GETCommand: (commandId: string): RequestConfig<CommandDto> => ({
         method: "GET",
         url: `/api/commands/${encodeURIComponent(commandId)}`,
@@ -258,7 +277,7 @@ export const APIRoutes = {
 
     PATCHCommandStatus: (commandId: string, status: CommandStatus): RequestConfig<EmptyBody> => ({
         method: "PATCH",
-        url: `/api/commands/${encodeURIComponent(commandId)}`,
+        url: `/api/commands/${encodeURIComponent(commandId)}/status`,
         data: {
             status,
         },

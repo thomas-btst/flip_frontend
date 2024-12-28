@@ -23,3 +23,16 @@ export interface UpdateUserDto {
     phone: string,
     address: AddressDto,
 }
+
+export interface UserPageDto {
+    users: ShortUserDto[],
+    pages: number,
+}
+
+export interface ShortUserDto {
+    id: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone?: string,
+}

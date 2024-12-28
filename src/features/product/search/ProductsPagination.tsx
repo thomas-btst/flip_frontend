@@ -57,7 +57,7 @@ export function ProductPagination({search, types, minPrice, maxPrice}: SearchPar
 
     return (
         <>
-            <div className="w-2/3 mx-auto">
+            <div className="w-2/3 mx-auto mb-10">
                 {data?.pages.some(page => page.products.length > 0) ?
                     <InfiniteScroll
                         pageStart={0}

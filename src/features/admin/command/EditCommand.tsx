@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../../api/FlipApi"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowsRotate, faCity, faFileInvoice, faLocationDot } from "@fortawesome/free-solid-svg-icons"
+import { faArrowsRotate, faCity, faFileInvoice, faLocationDot, faUser } from "@fortawesome/free-solid-svg-icons"
 import { formatDate } from "../../../utils/date"
 import { commandStatus } from "../../../utils/command"
 import { Price } from "../../../utils/price"
@@ -49,7 +49,11 @@ export function EditCommand({commandId}: {commandId: string}) {
                         options={selectCommandStatusOptions as {value: CommandStatus, label: string}[]}
                     />
                 </div>
-                <div className="flex space-x-10 items-center">
+                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-10 items-center">
+                    <Link to={`../user/${command.userId}`} className="text-nowrap hover:underline space-x-2">
+                        <FontAwesomeIcon icon={faUser} className="size-5"/>
+                        <span>Utilisateur</span>
+                    </Link>
                     <span className={"flex space-x-3 items-center " + commandStatus(command.status).className}>
                         <FontAwesomeIcon className="size-5" icon={commandStatus(command.status).icon}/>
                         <span>{commandStatus(command.status).title}</span>

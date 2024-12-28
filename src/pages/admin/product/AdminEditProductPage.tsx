@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
-import { CreateOrEditProduct } from "../../features/admin/product/CreateOrEditProduct";
+import { CreateOrEditProduct } from "../../../features/admin/product/CreateOrEditProduct";
 import { useQuery } from "@tanstack/react-query";
-import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../api/FlipApi";
+import { APIAxios, APIRoutes, UNKNOWN_ERROR } from "../../../api/FlipApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 

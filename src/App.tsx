@@ -12,17 +12,19 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { tanstackQueryClient } from "./config/tanstack.config";
 import { ProductPage } from "./pages/ProductPage";
 import { AdminPage } from "./pages/admin/AdminPage";
-import { AdminProductsPage } from "./pages/admin/AdminProductsPage";
+import { AdminProductsPage } from "./pages/admin/product/AdminProductsPage";
 import { Layout } from "./features/Layout";
-import { AdminCreateProductPage } from "./pages/admin/AdminCreateProductPage";
-import { AdminEditProductPage } from "./pages/admin/AdminEditProductPage";
+import { AdminCreateProductPage } from "./pages/admin/product/AdminCreateProductPage";
+import { AdminEditProductPage } from "./pages/admin/product/AdminEditProductPage";
 import { CartPage } from "./pages/CartPage";
 import { CommandsPage } from "./pages/command/CommandsPage";
 import { CommandPage } from "./pages/command/CommandPage";
-import { AdminCommandsPage } from "./pages/admin/AdminCommandsPage";
-import { AdminEditCommandPage } from "./pages/admin/AdminEditCommandPage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ContactPage } from "./pages/ContactPage";
+import { AdminCommandsPage } from "./pages/admin/command/AdminCommandsPage";
+import { AdminEditCommandPage } from "./pages/admin/command/AdminEditCommandPage";
+import { AdminUsersPage } from "./pages/admin/user/AdminUsersPage";
+import { AdminUserPage } from "./pages/admin/user/AdminUserPage";
 
 function AuthenticatedRoute() {
     if (useAuth() !== null)
@@ -70,6 +72,8 @@ export default function App() {
                                     <Route path="products" element={<AdminProductsPage/>}/>
                                     <Route path="commands" element={<AdminCommandsPage/>}/>
                                     <Route path="command/:commandId" element={<AdminEditCommandPage/>}/>
+                                    <Route path="users" element={<AdminUsersPage/>}/>
+                                    <Route path="user/:userId" element={<AdminUserPage/>}/>
                                 </Route>
                                 <Route path='*' element={<NotFound/>}/>
                             </Route>

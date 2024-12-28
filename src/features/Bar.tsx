@@ -101,7 +101,7 @@ export function Bar(params: SearchParams) {
             <div className="md:hidden">
                 <button
                     className="text-black py-3 px-3 rounded-full font-medium flex items-center"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    onClick={() => { setDropdownOpen(!dropdownOpen); }}
                 >
                     <FontAwesomeIcon icon={faBars}/>
                 </button>
@@ -110,7 +110,7 @@ export function Bar(params: SearchParams) {
                 {auth?.roles.includes("ADMIN") && (
                     <Link
                         to="/admin"
-                        onClick={() => setDropdownOpen(false)}
+                        onClick={() => { setDropdownOpen(false); }}
                         title="Administrer"
                         className="block text-black hover:bg-gray-200 py-2 px-4 text-nowrap rounded-lg"
                     >
@@ -120,7 +120,7 @@ export function Bar(params: SearchParams) {
                 )}
                 <Link
                     to={auth ? "/cart" : "/login"}
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => { setDropdownOpen(false); }}
                     title={auth ? "Mon panier" : undefined}
                     className="block text-black hover:bg-gray-200 py-2 px-4 text-nowrap rounded-lg"
                 >
@@ -128,7 +128,7 @@ export function Bar(params: SearchParams) {
                 </Link>
                 <Link
                     to={auth ? "/account" : "/register"}
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => { setDropdownOpen(false); }}
                     title={auth ? "Profil" : undefined}
                     className="block text-black hover:bg-gray-200 py-2 px-4 text-nowrap rounded-lg"
                 >

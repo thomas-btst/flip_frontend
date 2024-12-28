@@ -117,7 +117,7 @@ export function Profile() {
             return
         setError(false)
         setLogoLoading(true)
-        void APIAxios(APIRoutes.PUTUserLogo(files[0]))
+        void APIAxios(APIRoutes.PATCHUserLogo(files[0]))
             .then(() => refetch())
             .catch(() => { setError(true); })
             .finally(() => { setLogoLoading(false); })
@@ -142,26 +142,24 @@ export function Profile() {
                     {/* User Info Section */}
                     <header className="flex items-center space-x-6 space-y-4 w-full flex-col md:flex-row relative">
                         {/* Logo */}
-                        <div className="relative group space-y-4">
-                            <div className="absolute bg-black hidden group-hover:block bg-opacity-20 rounded-full">
+                        <div className="relative group max-w-24 max-h-24">
+                            <div className="z-10 absolute w-full h-full bg-black hidden group-hover:block bg-opacity-20 rounded-full">
                                 <input
                                     type="file"
                                     onChange={handleLogoUpload}
-                                    className="w-24 h-24 opacity-0 cursor-pointer"
+                                    className="w-full h-full opacity-0 cursor-pointer"
                                     accept="image/*"
                                 />
                             </div>
-                            <div className="absolute hidden group-hover:flex w-24 h-24 pointer-events-none justify-center items-center">
+                            <div className="z-20 absolute hidden group-hover:flex w-full h-full pointer-events-none justify-center items-center">
                                 <FontAwesomeIcon className="w-6 h-6 text-slate-100" icon={faPenToSquare} />
                             </div>
                             {user.logo ?
-                                <div className="w-24 h-24">
-                                    <img src={user.logo} alt="logo" className="object-contain bg-slate-300 w-24 h-24 rounded-full"/>
-                                </div>
+                                <img src={user.logo} alt="logo" className="object-contain bg-slate-300 w-full h-full rounded-full"/>
                             :
                                 <FontAwesomeIcon
                                     icon={faUserCircle}
-                                    className="w-24 h-24 rounded-full text-slate-300"
+                                    className="w-full h-full rounded-full text-slate-300"
                                 />
                             }
                         </div>

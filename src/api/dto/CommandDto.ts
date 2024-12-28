@@ -12,6 +12,7 @@ export const CommandTranslation = new Map<CommandStatus, string>([
 
 export interface CommandDto {
     id: string,
+    userId: string,
     invoice: string,
     date: string,
     address: AddressDto,

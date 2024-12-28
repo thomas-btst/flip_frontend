@@ -62,7 +62,7 @@ export function Product({productId}: {productId: string}) {
             .finally(() => { setLoading(false); })
     }
 
-    return <div className="mx-3">
+    return <div className="mx-3 mb-5">
         {product && (
             <div className="max-w-7xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-6">
                 <div className="flex space-x-6">

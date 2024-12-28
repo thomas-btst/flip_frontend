@@ -30,7 +30,7 @@ export function Command({commandId}: {commandId: string}) {
     }
 
     return <div className="mx-3">
-        {command && <div className="max-w-5xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-8">
+        {command && <div className="max-w-5xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-8 mb-7">
             <header className="flex flex-col md:flex-row space-y-5 justify-between">
                 <div className="flex justify-between items-center space-x-8">
                     <div

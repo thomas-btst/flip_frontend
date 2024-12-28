@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { EditCommand } from "../../features/admin/command/EditCommand"
+import { EditCommand } from "../../../features/admin/command/EditCommand"
 
 export function AdminEditCommandPage() {
     const {commandId} = useParams<{commandId: string}>()
