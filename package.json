@@ -15,6 +15,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@stripe/react-stripe-js": "^3.1.1",
+    "@stripe/stripe-js": "^5.4.0",
     "@tanstack/react-query": "^4.36.1",
     "framer-motion": "^11.11.17",
     "react": "^18.3.1",
@@ -22,7 +24,8 @@
     "react-infinite-scroller": "^1.2.6",
     "react-masonry-css": "^1.0.16",
     "react-paginate": "^8.2.0",
-    "react-password-strength-bar": "^0.4.1"
+    "react-password-strength-bar": "^0.4.1",
+    "stripe": "^17.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

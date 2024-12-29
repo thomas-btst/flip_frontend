@@ -13,7 +13,7 @@ export const CommandTranslation = new Map<CommandStatus, string>([
 export interface CommandDto {
     id: string,
     userId: string,
-    invoice: string,
+    invoice: string | null,
     date: string,
     address: AddressDto,
     products: {
@@ -22,14 +22,14 @@ export interface CommandDto {
         quantity: number,
     }[],
     total: number,
-    status: CommandStatus,
+    status: CommandStatus | null,
 }
 
 export interface ShortCommandDto {
     id: string,
-    invoice: string,
+    invoice: string | null,
     date: string,
-    status: CommandStatus,
+    status: CommandStatus | null,
     total: number,
 }
 

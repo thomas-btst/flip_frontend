@@ -25,6 +25,8 @@ import { AdminCommandsPage } from "./pages/admin/command/AdminCommandsPage";
 import { AdminEditCommandPage } from "./pages/admin/command/AdminEditCommandPage";
 import { AdminUsersPage } from "./pages/admin/user/AdminUsersPage";
 import { AdminUserPage } from "./pages/admin/user/AdminUserPage";
+import { PaymentReturn } from "./features/payment/PaymentReturn";
+import { PaymentForm } from "./features/payment/PaymentForm";
 
 function AuthenticatedRoute() {
     if (useAuth() !== null)
@@ -64,6 +66,8 @@ export default function App() {
                                     <Route path='cart' element={<CartPage/>}/>
                                     <Route path='commands' element={<CommandsPage/>}/>
                                     <Route path='command/:commandId' element={<CommandPage/>}/>
+                                    <Route path="payment" element={<PaymentForm/>} />
+                                    <Route path="payment/return" element={<PaymentReturn/>} />
                                 </Route>
                                 <Route path="admin" element={<AdminRoute/>}>
                                     <Route path="" element={<AdminPage/>}/>

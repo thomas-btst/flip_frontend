@@ -46,18 +46,21 @@ export function Command({commandId}: {commandId: string}) {
                     }
                 </div>
                 <div className="flex space-x-10 items-center">
-                    <span className={"flex space-x-3 items-center " + commandStatus(command.status).className}>
-                        <FontAwesomeIcon className="size-5" icon={commandStatus(command.status).icon}/>
-                        <span>{commandStatus(command.status).title}</span>
+                    <span className={"flex space-x-3 items-center " + commandStatus(command.status ?? "CANCELED").className}>
+                        <FontAwesomeIcon className="size-5" icon={commandStatus(command.status ?? "CANCELED").icon}/>
+                        <span>{commandStatus(command.status ?? "CANCELED").title}</span>
                     </span>
-                    <a
-                        href={command.invoice}
-                        target="_blank"
-                        className="hover:underline transition-transform flex items-center space-x-2" rel="noreferrer"
-                    >
-                        <FontAwesomeIcon icon={faFileInvoice} className="font-medium text-orange-300 size-8"/>
-                        <span>Facture</span>
-                    </a>
+                    {command.invoice ?
+                        <a
+                            href={command.invoice}
+                            target="_blank"
+                            className="hover:underline transition-transform flex items-center space-x-2" rel="noreferrer"
+                        >
+                            <FontAwesomeIcon icon={faFileInvoice} className="font-medium text-orange-300 size-8"/>
+                            <span>Facture</span>
+                        </a>
+                        : <div>La commande n&apos;a pas été payée</div>
+                    }
                 </div>
             </header>
             <div className="flex flex-col md:flex-row items-start md:space-x-20 md:space-y-0 space-y-7">

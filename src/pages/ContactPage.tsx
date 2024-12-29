@@ -22,7 +22,7 @@ export function ContactPage() {
                     <div className="mt-8">
                         <h4 className="text-xl font-semibold text-gray-900">Où nous trouver</h4>
                         <div className="mt-4 w-full h-80">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.298131830701!2d2.293676515674596!3d48.85884497928798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e671ed2ac4ef4f%3A0x4315920d8b2803a0!2sEiffel%20Tower!5e0!3m2!1sen!2sfr!4v1609238876002!5m2!1sen!2sfr" width="100%" height="100%" className="rounded-sm"></iframe>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6767.444784302279!2d5.407767409673927!3d43.312230038410306!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12c9bf4344da5333%3A0x40819a5fd970220!2sMarseille!5e0!3m2!1sfr!2sfr!4v1735473061020!5m2!1sfr!2sfr" width="100%" height="100%" className="rounded-sm"></iframe>
                         </div>
                     </div>
                 </div>

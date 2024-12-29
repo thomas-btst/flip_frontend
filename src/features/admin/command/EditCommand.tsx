@@ -32,7 +32,7 @@ export function EditCommand({commandId}: {commandId: string}) {
     }
 
     return <div className="mx-3">
-        {command && <div className="max-w-5xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-8">
+        {command && <div className="max-w-5xl mx-auto p-8 bg-gray-50 shadow-lg rounded-lg space-y-8 mb-10">
             <header className="flex flex-col md:flex-row space-y-5 justify-between">
                 <div className="flex flex-col md:flex-row justify-between md:space-y-0 space-y-4 md:items-center md:space-x-8">
                     <div
@@ -41,33 +41,38 @@ export function EditCommand({commandId}: {commandId: string}) {
                         <h2 className="text-2xl font-bold">Commande du {formatDate(new Date(command.date))}</h2>
                         <span className="italic text-lg">{command.id}</span>
                     </div>
-                    <Select
-                        value={selectCommandStatusOptions.find(option => option.value === command.status)}
-                        onChange={options => {if (options) handleChangeStatus(options.value)}}
-                        className="w-1/2"
-                        isSearchable={true}
-                        options={selectCommandStatusOptions as {value: CommandStatus, label: string}[]}
-                    />
+                    { command.status &&
+                        <Select
+                            value={selectCommandStatusOptions.find(option => option.value === command.status)}
+                            onChange={options => {if (options) handleChangeStatus(options.value)}}
+                            className="w-1/2"
+                            isSearchable={true}
+                            options={selectCommandStatusOptions as {value: CommandStatus, label: string}[]}
+                        />
+                    }
                 </div>
                 <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-10 items-center">
                     <Link to={`../user/${command.userId}`} className="text-nowrap hover:underline space-x-2">
                         <FontAwesomeIcon icon={faUser} className="size-5"/>
                         <span>Utilisateur</span>
                     </Link>
-                    <span className={"flex space-x-3 items-center " + commandStatus(command.status).className}>
-                        <FontAwesomeIcon className="size-5" icon={commandStatus(command.status).icon}/>
-                        <span>{commandStatus(command.status).title}</span>
+                    <span className={"flex space-x-3 items-center " + commandStatus(command.status ?? "CANCELED").className}>
+                        <FontAwesomeIcon className="size-5" icon={commandStatus(command.status ?? "CANCELED").icon}/>
+                        <span>{commandStatus(command.status ?? "CANCELED").title}</span>
                     </span>
-                    <a
-                        href={command.invoice}
-                        target="_blank"
-                        className="hover:underline transition-transform flex items-center space-x-2" rel="noreferrer"
-                    >
-                        <FontAwesomeIcon icon={faFileInvoice} className="font-medium text-orange-300 size-8"/>
-                        <span>Facture</span>
-                    </a>
+                    {command.invoice &&
+                        <a
+                            href={command.invoice}
+                            target="_blank"
+                            className="hover:underline transition-transform flex items-center space-x-2" rel="noreferrer"
+                        >
+                            <FontAwesomeIcon icon={faFileInvoice} className="font-medium text-orange-300 size-8"/>
+                            <span>Facture</span>
+                        </a>
+                    }
                 </div>
             </header>
+            {command.status === null && <div>La commande n&apos;a pas été payée</div>}
             <div className="flex flex-col md:flex-row items-start md:space-x-20 md:space-y-0 space-y-7">
                 <div className="space-y-3">
                     <h3 className="text-lg font-bold">Addresse de livraison</h3>

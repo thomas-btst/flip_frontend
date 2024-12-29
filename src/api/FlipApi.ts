@@ -17,26 +17,6 @@ export type RequestConfig<_> = AxiosRequestConfig & {
 
 export const UNKNOWN_ERROR = "Une erreur inconnue est survenue. Merci de réessayer plus tard."
 
-axios.interceptors.response.use(
-    (response) => response,
-    async (error: AxiosError & {config: {_retry: boolean}}) => {
-        const originalRequest = error.config
-        const token = AuthStore.get()
-        if (token !== null && error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true
-            try {
-                const response = await APIAxios(APIRoutes.POSTRefreshToken(token.refreshToken, token.accessToken))
-                AuthStore.set({...token, accessToken: response.accessToken})
-                originalRequest.headers.Authorization = `Bearer ${response.accessToken}`
-                return await axios(originalRequest)
-            } catch {
-                AuthStore.unset()
-            }
-        }
-        return Promise.reject(error)
-    }
-)
-
 export function APIAxios<T>({bearer, ...config}: RequestConfig<T>, setLoading?: (loading: boolean) => void): Promise<T> {
     const auth = AuthStore.get()
     if(setLoading)
@@ -48,6 +28,22 @@ export function APIAxios<T>({bearer, ...config}: RequestConfig<T>, setLoading?: 
             ...(bearer && auth ? {Authorization: `Bearer ${auth.accessToken}`} : {})
         }
     }).then(response => response.data)
+        .catch((error: AxiosError) => {
+            if (auth !== null && error.response?.status === 401 && bearer) {
+                APIAxios(APIRoutes.POSTRefreshToken(auth.refreshToken, auth.accessToken))
+                    .then(response => {
+                        AuthStore.set({...auth, accessToken: response.accessToken})
+                        return axios<T>({
+                            ...config,
+                            headers: {
+                                ...config.headers,
+                                Authorization: `Bearer ${response.accessToken}`,
+                            }
+                        })
+                    }).catch(() => { AuthStore.unset(); })
+            }
+            throw error
+        })
         .finally(() => {
             if(setLoading)
                 setLoading(false)
@@ -229,9 +225,15 @@ export const APIRoutes = {
         bearer: true,
     }),
 
-    POSTCommand: (): RequestConfig<string> => ({
+    POSTInitPaymentSession: (): RequestConfig<string> => ({
         method: "POST",
-        url: "/api/commands",
+        url: '/api/commands/sessions',
+        bearer: true,
+    }),
+
+    POSTFinalizePaymentSession: (sessionId: string): RequestConfig<string> => ({
+        method: "POST",
+        url: `/api/commands/sessions/${encodeURIComponent(sessionId)}`,
         bearer: true,
     }),
 
@@ -300,5 +302,5 @@ export const APIRoutes = {
             refreshToken: AuthStore.get()?.refreshToken,
             accessToken: AuthStore.get()?.accessToken,
         }  
-    })
+    }),
 }

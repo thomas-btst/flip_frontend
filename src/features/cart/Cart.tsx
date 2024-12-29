@@ -6,7 +6,6 @@ import { Price } from "../../utils/price"
 import { MouseEvent, useState } from "react"
 import { CartQuantity } from "./CartQuantity"
 import { Link, useNavigate } from "react-router-dom"
-import { AxiosError } from "axios"
 
 export function Cart() {
     const [loading, setLoading] = useState(false)
@@ -43,25 +42,24 @@ export function Cart() {
             .finally(() => { setLoading(false); })
     }
 
-    function command(event: MouseEvent<HTMLButtonElement>) {
+    function initCommand(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
         if (loading)
             return
         setLoading(true)
-        setAddress(false)
         setError(false)
-        APIAxios(APIRoutes.POSTCommand())
-            .then(commandId => {navigate(`/command/${commandId}`)})
-            .catch(e => {
-                if (e instanceof AxiosError && e.status === 409)
-                    setAddress(true)
+        APIAxios(APIRoutes.GETUserProfile())
+            .then(user => {
+                if (user.address) 
+                    navigate("/payment")
                 else
-                    setError(true)
+                    setAddress(true)
             })
-            .finally(() => { setLoading(false) })
+            .catch(() => { setError(true); })
+            .finally(() => { setLoading(false); })
     }
 
-    return <div className="mx-3">
+    return <div className="mx-3 mt-4 mb-10">
         {cart && cart.products.length !== 0 ?
             <div className="max-w-5xl mx-auto space-y-10 p-10 bg-gray-50 rounded-lg shadow-lg flex flex-col">
                 <div className="flex justify-between space-y-5 space-x-5 items-center">
@@ -120,7 +118,7 @@ export function Cart() {
                         }
                     </span>
                     <button
-                        onClick={command}
+                        onClick={initCommand}
                         className="bg-red-500 text-white rounded-md px-2 py-1 font-bold hover:bg-red-600"
                     >Commander</button>
                 </div>

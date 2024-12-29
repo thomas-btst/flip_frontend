@@ -7,6 +7,8 @@ const AuthSetContext = createContext<((value: AuthStore.State | null) => void) |
 
 export function AuthProvider({children}: {children: ReactNode}){
     const [auth, setAuth] = useState<AuthStore.State | null>(AuthStore.get())
+    if (AuthStore.get()?.accessToken !== auth?.accessToken)
+        setAuth(AuthStore.get())
 
     return <AuthContext.Provider value={auth}>
         <AuthSetContext.Provider value={setAuth}>
