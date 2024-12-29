@@ -12,12 +12,12 @@ export function PaymentForm() {
     return (
       <div id="checkout">
         <EmbeddedCheckoutProvider
-          stripe={loadStripe(publicKey)}
-          options={{
-            fetchClientSecret,
-          }}
+            stripe={loadStripe(publicKey)}
+            options={{
+                fetchClientSecret,
+            }}
         >
-          <EmbeddedCheckout/>
+            <EmbeddedCheckout/>
         </EmbeddedCheckoutProvider>
       </div>
     )

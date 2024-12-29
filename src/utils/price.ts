@@ -4,6 +4,6 @@ export namespace Price {
     }
     
     export function toInteger(price: number) {
-        return price * 100
+        return Math.round(price * 100)
     }
 }
