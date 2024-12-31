@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios"
 import { AccessTokenDto, ActivationDto, LoginDto, RegisterDto, ResetPasswordDto, TokenDto } from "./dto/AuthenticationDto"
-import { ShortUserDto, UpdateUserDto, UserDto, UserPageDto } from "./dto/User"
+import { ShortUserDto, UpdateUserDto, UserDto, UserPageDto, UsersStatsDto } from "./dto/User"
 import { CreateProductDto, ProductPageDto, ProductDto, ProductPaginationDto, ProductType, UpdateProductDto } from "./dto/Product"
 import { CartDto, CartQuantityDto } from "./dto/CartDto"
-import { CommandDto, CommandPageDto, CommandStatus, ShortCommandDto } from "./dto/CommandDto"
+import { CommandDto, CommandPageDto, CommandsStatsDto, CommandStatus, ShortCommandDto } from "./dto/CommandDto"
 import { AuthStore } from "../utils/storage"
 
 type EmptyBody = ""
@@ -302,5 +302,17 @@ export const APIRoutes = {
             refreshToken: AuthStore.get()?.refreshToken,
             accessToken: AuthStore.get()?.accessToken,
         }  
+    }),
+
+    GETCommandsStats: (): RequestConfig<CommandsStatsDto> => ({
+        method: "GET",
+        url: '/api/commands/stats',
+        bearer: true,
+    }),
+
+    GETUsersStats: (): RequestConfig<UsersStatsDto> => ({
+        method: "GET",
+        url: '/api/users/stats',
+        bearer: true,
     }),
 }

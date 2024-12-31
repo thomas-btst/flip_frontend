@@ -65,10 +65,7 @@ export function Profile() {
 
     const {data: user, isLoading, isError, refetch} = useQuery({
         queryKey: ['account'], 
-        queryFn: () => APIAxios(APIRoutes.GETUserProfile()).then(user => ({
-            ...user,
-            logo: user.logo ? `${user.logo}?${new Date().getTime().toString()}` : undefined
-        })),
+        queryFn: () => APIAxios(APIRoutes.GETUserProfile()),
     })
 
     function resetPassword(event: MouseEvent<HTMLButtonElement>, email: string) {
@@ -155,7 +152,7 @@ export function Profile() {
                                 <FontAwesomeIcon className="w-6 h-6 text-slate-100" icon={faPenToSquare} />
                             </div>
                             {user.logo ?
-                                <img src={user.logo} alt="logo" className="object-contain bg-slate-300 w-full h-full rounded-full"/>
+                                <div className={`bg-contain bg-slate-300 w-24 h-24 rounded-full`} style={{backgroundImage: `url(${user.logo})`}}/>
                             :
                                 <FontAwesomeIcon
                                     icon={faUserCircle}

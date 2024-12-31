@@ -112,7 +112,7 @@ export function AdminCommands() {
                                         {formatDate(new Date(command.date))}
                                     </td>
                                     <td className="px-6 py-4 text-nowrap hidden md:table-cell">
-                                        {CommandTranslation.get(command.status)}
+                                        {CommandTranslation.get(command.status ?? "CANCELED")}
                                     </td>
                                     <td className="px-6 py-4 text-nowrap hidden md:table-cell">
                                         {Price.toPrice(command.total)} €
@@ -125,13 +125,13 @@ export function AdminCommands() {
                                             <FontAwesomeIcon className="size-5" icon={faEye}/>
                                             <span>Voir</span>
                                         </button>
-                                        <a
+                                        {command.invoice && <a
                                             href={command.invoice}
                                             target="_blank"
                                             className="hover:scale-[1.17] transition-transform" rel="noreferrer"
                                         >
                                             <FontAwesomeIcon icon={faFileInvoice} className="font-medium text-orange-300 size-6" title="Facture"/>
-                                        </a>
+                                        </a>}
                                     </td>
                                 </tr>
                             )}

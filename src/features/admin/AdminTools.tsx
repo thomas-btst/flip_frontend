@@ -20,7 +20,7 @@ export function AdminTools() {
             <SquareLink icon={faCartShopping} title="Produits" to="products"/>
             <SquareLink icon={faUser} title="Clients" to="users"/>
             <SquareLink icon={faFileLines} title="Commandes" to="commands"/>
-            <SquareLink icon={faChartSimple} title="Statistiques" to="stats" disabled/>
+            <SquareLink icon={faChartSimple} title="Statistiques" to="stats"/>
         </div>
     </div>
 }

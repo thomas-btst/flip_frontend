@@ -27,6 +27,7 @@ import { AdminUsersPage } from "./pages/admin/user/AdminUsersPage";
 import { AdminUserPage } from "./pages/admin/user/AdminUserPage";
 import { PaymentReturn } from "./features/payment/PaymentReturn";
 import { PaymentForm } from "./features/payment/PaymentForm";
+import { StatsPage } from "./pages/admin/StatsPage";
 
 function AuthenticatedRoute() {
     if (useAuth() !== null)
@@ -71,6 +72,7 @@ export default function App() {
                                 </Route>
                                 <Route path="admin" element={<AdminRoute/>}>
                                     <Route path="" element={<AdminPage/>}/>
+                                    <Route path="stats" element={<StatsPage/>}/>
                                     <Route path="product" element={<AdminCreateProductPage/>}/>
                                     <Route path="product/:productId" element={<AdminEditProductPage/>}/>
                                     <Route path="products" element={<AdminProductsPage/>}/>

@@ -36,3 +36,7 @@ export interface ShortUserDto {
     email: string,
     phone?: string,
 }
+
+export interface UsersStatsDto {
+    count: number,
+}

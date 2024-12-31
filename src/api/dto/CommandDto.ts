@@ -37,3 +37,24 @@ export interface CommandPageDto {
     commands: ShortCommandDto[],
     pages: number,
 }
+
+export interface CommandsStatsDto {
+    count: number,
+    total: number,
+    delivered: number,
+    canceled: number,
+    months: CommandsStatsMonthDto[],
+    topProducts: CommandsTopProductDto[],
+}
+
+export interface CommandsTopProductDto {
+    id: string,
+    count: number,
+    product: ProductDto | null,
+}
+
+export interface CommandsStatsMonthDto {
+    date: string,
+    count: number,
+    total: number,
+}
