@@ -6,6 +6,8 @@ import { CartDto, CartQuantityDto } from "./dto/CartDto"
 import { CommandDto, CommandPageDto, CommandsStatsDto, CommandStatus, ShortCommandDto } from "./dto/CommandDto"
 import { AuthStore } from "../utils/storage"
 
+const apiURL = import.meta.env.VITE_API_URL as string
+
 type EmptyBody = ""
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
@@ -23,6 +25,7 @@ export function APIAxios<T>({bearer, ...config}: RequestConfig<T>, setLoading?: 
         setLoading(true)
     return axios<T>({
         ...config,
+        baseURL: apiURL,
         headers: {
             ...config.headers,
             ...(bearer && auth ? {Authorization: `Bearer ${auth.accessToken}`} : {})
@@ -53,31 +56,31 @@ export function APIAxios<T>({bearer, ...config}: RequestConfig<T>, setLoading?: 
 export const APIRoutes = {
     POSTRegister: (registerDto: RegisterDto): RequestConfig<EmptyBody> => ({
         method: "POST",
-        url: "/api/auth/register",
+        url: "/auth/register",
         data: registerDto,
     }),
     
     POSTLogin: (loginDto: LoginDto): RequestConfig<TokenDto> => ({
         method: "POST", 
-        url: "/api/auth/login",
+        url: "/auth/login",
         data: loginDto,
     }),
 
     GETUserProfile: (): RequestConfig<UserDto> => ({
         method: "GET",
-        url: "/api/users",
+        url: "/users",
         bearer: true,
     }),
 
     GETUser: (userId: string): RequestConfig<ShortUserDto> => ({
         method: "GET",
-        url: `/api/users/${encodeURIComponent(userId)}`,
+        url: `/users/${encodeURIComponent(userId)}`,
         bearer: true,
     }),
 
     PUTUserProfile: (profile: UpdateUserDto): RequestConfig<EmptyBody> => ({
         method: "PUT",
-        url: "/api/users",
+        url: "/users",
         bearer: true,
         data: profile,
     }),
@@ -87,7 +90,7 @@ export const APIRoutes = {
         formData.append("logo", logo)
         return {
             method: "PATCH",
-            url: "/api/users/logo",
+            url: "/users/logo",
             headers: {"Content-Type": "multipart/form-data"},
             data: formData,
             bearer: true,
@@ -96,30 +99,30 @@ export const APIRoutes = {
 
     POSTSendActivationKey: (email: string): RequestConfig<EmptyBody> => ({
         method: "POST",
-        url: `/api/auth/activate/send/${email}`,
+        url: `/auth/activate/send/${email}`,
     }),
 
     POSTActivateUser: (activationDto: ActivationDto): RequestConfig<TokenDto> => ({
         method: "POST",
-        url: "/api/auth/activate",
+        url: "/auth/activate",
         data: activationDto,
     }),
 
     GETUsersByPage: (limit: number, page: number, search: string): RequestConfig<UserPageDto> => ({
         method: "GET",
-        url: `/api/users/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
+        url: `/users/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
         params: {search},
         bearer: true,
     }),
 
     POSTSendResetPasswordKey: (email: string): RequestConfig<EmptyBody> => ({
         method: "POST",
-        url: `/api/auth/reset-password/send/${email}`,
+        url: `/auth/reset-password/send/${email}`,
     }),
 
     POSTResetPassword: (resetPasswordDto: ResetPasswordDto): RequestConfig<TokenDto> => ({
        method: "POST",
-       url: "/api/auth/reset-password",
+       url: "/auth/reset-password",
        data: resetPasswordDto,
     }),
 
@@ -129,7 +132,7 @@ export const APIRoutes = {
         params: {search: string, type?: ProductType}
     ): RequestConfig<ProductPageDto> => ({
         method: "GET",
-        url: `/api/public/products/limit/${limit.toString()}/page/${page.toString()}`,
+        url: `/public/products/limit/${limit.toString()}/page/${page.toString()}`,
         params,
     }),
 
@@ -142,13 +145,13 @@ export const APIRoutes = {
         search?: string,
     }): RequestConfig<ProductPaginationDto> => ({
         method: "GET",
-        url: `/api/public/products/limit/${limit.toString()}`,
+        url: `/public/products/limit/${limit.toString()}`,
         params,
     }),
 
     GETProduct: (productId: string): RequestConfig<ProductDto> => ({
         method: "GET",
-        url: `/api/public/products/${encodeURIComponent(productId)}`
+        url: `/public/products/${encodeURIComponent(productId)}`
     }),
 
     POSTProduct: (productDto: CreateProductDto, picture: File): RequestConfig<string> => {
@@ -160,7 +163,7 @@ export const APIRoutes = {
         formData.append("picture", picture)
         return {
             method: "POST",
-            url: "/api/products",
+            url: "/products",
             headers: {"Content-Type": "multipart/form-data"},
             data: formData,
             bearer: true,
@@ -170,7 +173,7 @@ export const APIRoutes = {
     PUTProduct: (productId: string, productDto: UpdateProductDto): RequestConfig<string> => {
         return {
             method: "PUT",
-            url: `/api/products/${encodeURIComponent(productId)}`,
+            url: `/products/${encodeURIComponent(productId)}`,
             data: productDto,
             bearer: true,
         }
@@ -181,7 +184,7 @@ export const APIRoutes = {
         formData.append("picture", picture)
         return {
             method: "PATCH",
-            url: `/api/products/${encodeURIComponent(productId)}/picture`,
+            url: `/products/${encodeURIComponent(productId)}/picture`,
             headers: {"Content-Type": "multipart/form-data"},
             data: formData,
             bearer: true,
@@ -190,86 +193,86 @@ export const APIRoutes = {
 
     DELETEProduct: (productId: string): RequestConfig<EmptyBody> => ({
         method: "DELETE",
-        url: `/api/products/${encodeURIComponent(productId)}`,
+        url: `/products/${encodeURIComponent(productId)}`,
         bearer: true,
     }),
 
     GETCart: (): RequestConfig<CartDto> => ({
         method: "GET",
-        url: "/api/carts",
+        url: "/carts",
         bearer: true,
     }),
 
     GETCartQuantity: (productId: string): RequestConfig<CartQuantityDto> => ({
         method: "GET",
-        url: `/api/carts/${encodeURIComponent(productId)}/quantity`,
+        url: `/carts/${encodeURIComponent(productId)}/quantity`,
         bearer: true,
     }),
 
     PATCHCart: (productId: string, quantity: number): RequestConfig<EmptyBody> => ({
         method: "PATCH",
-        url: `/api/carts/${encodeURIComponent(productId)}`,
+        url: `/carts/${encodeURIComponent(productId)}`,
         data: {quantity},
         bearer: true,
     }),
 
     DELETECartProduct: (productId: string): RequestConfig<EmptyBody> => ({
         method: "DELETE",
-        url: `/api/carts/${encodeURIComponent(productId)}`,
+        url: `/carts/${encodeURIComponent(productId)}`,
         bearer: true,
     }),
 
     DELETECart: (): RequestConfig<EmptyBody> => ({
         method: "DELETE",
-        url: "/api/carts",
+        url: "/carts",
         bearer: true,
     }),
 
     POSTInitPaymentSession: (): RequestConfig<string> => ({
         method: "POST",
-        url: '/api/commands/sessions',
+        url: '/commands/sessions',
         bearer: true,
     }),
 
     POSTFinalizePaymentSession: (sessionId: string): RequestConfig<string> => ({
         method: "POST",
-        url: `/api/commands/sessions/${encodeURIComponent(sessionId)}`,
+        url: `/commands/sessions/${encodeURIComponent(sessionId)}`,
         bearer: true,
     }),
 
     GETCommands: (): RequestConfig<ShortCommandDto[]> => ({
         method: "GET",
-        url: "/api/commands",
+        url: "/commands",
         bearer: true,
     }),
 
     GETCommandsForUser: (userId: string): RequestConfig<ShortCommandDto[]> => ({
         method: "GET",
-        url: `/api/commands/users/${encodeURIComponent(userId)}`,
+        url: `/commands/users/${encodeURIComponent(userId)}`,
         bearer: true,
     }),
 
     GETCommand: (commandId: string): RequestConfig<CommandDto> => ({
         method: "GET",
-        url: `/api/commands/${encodeURIComponent(commandId)}`,
+        url: `/commands/${encodeURIComponent(commandId)}`,
         bearer: true,
     }),
 
     GETAdminCommand: (commandId: string): RequestConfig<CommandDto> => ({
         method: "GET",
-        url: `/api/commands/admin/${encodeURIComponent(commandId)}`,
+        url: `/commands/admin/${encodeURIComponent(commandId)}`,
         bearer: true,
     }),
 
     PATCHCancelCommand: (commandId: string): RequestConfig<EmptyBody> => ({
         method: "PATCH",
-        url: `/api/commands/${encodeURIComponent(commandId)}/cancel`,
+        url: `/commands/${encodeURIComponent(commandId)}/cancel`,
         bearer: true,
     }),
 
     GETCommandPage: (limit: number, page: number, search: string, status: CommandStatus | undefined): RequestConfig<CommandPageDto> => ({
         method: "GET",
-        url: `/api/commands/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
+        url: `/commands/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
         params: {
             search,
             status,
@@ -279,7 +282,7 @@ export const APIRoutes = {
 
     PATCHCommandStatus: (commandId: string, status: CommandStatus): RequestConfig<EmptyBody> => ({
         method: "PATCH",
-        url: `/api/commands/${encodeURIComponent(commandId)}/status`,
+        url: `/commands/${encodeURIComponent(commandId)}/status`,
         data: {
             status,
         },
@@ -288,7 +291,7 @@ export const APIRoutes = {
 
     POSTRefreshToken: (refreshToken: string, accessToken: string): RequestConfig<AccessTokenDto> => ({
         method: "POST", 
-        url: `/api/auth/token/refresh`,
+        url: `/auth/token/refresh`,
         data: {
             refreshToken,
             accessToken,
@@ -297,7 +300,7 @@ export const APIRoutes = {
 
     POSTLogout: (): RequestConfig<AccessTokenDto> => ({
         method: "POST",
-        url: '/api/auth/logout',
+        url: '/auth/logout',
         data: {
             refreshToken: AuthStore.get()?.refreshToken,
             accessToken: AuthStore.get()?.accessToken,
@@ -306,13 +309,13 @@ export const APIRoutes = {
 
     GETCommandsStats: (): RequestConfig<CommandsStatsDto> => ({
         method: "GET",
-        url: '/api/commands/stats',
+        url: '/commands/stats',
         bearer: true,
     }),
 
     GETUsersStats: (): RequestConfig<UsersStatsDto> => ({
         method: "GET",
-        url: '/api/users/stats',
+        url: '/users/stats',
         bearer: true,
     }),
 }

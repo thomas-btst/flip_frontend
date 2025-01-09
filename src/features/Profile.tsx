@@ -152,7 +152,7 @@ export function Profile() {
                                 <FontAwesomeIcon className="w-6 h-6 text-slate-100" icon={faPenToSquare} />
                             </div>
                             {user.logo ?
-                                <div className={`bg-contain bg-slate-300 w-24 h-24 rounded-full`} style={{backgroundImage: `url(${user.logo})`}}/>
+                                <img className="bg-contain bg-slate-300 block min-w-24 min-h-24 max-w-24 max-h-24 rounded-full" src={user.logo}/>
                             :
                                 <FontAwesomeIcon
                                     icon={faUserCircle}
