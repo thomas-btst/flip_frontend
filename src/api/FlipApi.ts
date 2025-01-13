@@ -68,7 +68,7 @@ export const APIRoutes = {
 
     GETUserProfile: (): RequestConfig<UserDto> => ({
         method: "GET",
-        url: "/users",
+        url: "/users/current",
         bearer: true,
     }),
 
@@ -110,8 +110,12 @@ export const APIRoutes = {
 
     GETUsersByPage: (limit: number, page: number, search: string): RequestConfig<UserPageDto> => ({
         method: "GET",
-        url: `/users/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
-        params: {search},
+        url: `/users`,
+        params: {
+            search,
+            limit,
+            page,
+        },
         bearer: true,
     }),
 
@@ -129,14 +133,19 @@ export const APIRoutes = {
     GETProductsByPage: (
         limit: number,
         page: number,
-        params: {search: string, type?: ProductType}
+        params: {search: string, type?: ProductType},
     ): RequestConfig<ProductPageDto> => ({
         method: "GET",
-        url: `/public/products/limit/${limit.toString()}/page/${page.toString()}`,
-        params,
+        url: `/products`,
+        params: {
+            ...params,
+            limit,
+            page,
+        },
+        bearer: true,
     }),
 
-    GETProducts: ({limit, ...params}: {
+    GETProducts: (params: {
         limit: number,
         pagination?: string,
         types?: ProductType[],
@@ -145,7 +154,7 @@ export const APIRoutes = {
         search?: string,
     }): RequestConfig<ProductPaginationDto> => ({
         method: "GET",
-        url: `/public/products/limit/${limit.toString()}`,
+        url: `/public/products`,
         params,
     }),
 
@@ -242,7 +251,7 @@ export const APIRoutes = {
 
     GETCommands: (): RequestConfig<ShortCommandDto[]> => ({
         method: "GET",
-        url: "/commands",
+        url: "/commands/current_user",
         bearer: true,
     }),
 
@@ -272,10 +281,12 @@ export const APIRoutes = {
 
     GETCommandPage: (limit: number, page: number, search: string, status: CommandStatus | undefined): RequestConfig<CommandPageDto> => ({
         method: "GET",
-        url: `/commands/limit/${encodeURIComponent(limit)}/page/${encodeURIComponent(page)}`,
+        url: `/commands`,
         params: {
             search,
             status,
+            limit,
+            page,
         },
         bearer: true,
     }),

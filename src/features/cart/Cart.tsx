@@ -147,7 +147,7 @@ export function Cart() {
         {/* Address not set */}
         {(address) && (
             <div className="text-red-600 text-xl text-center my-6">
-                Merci de remplir votre profile avant de passer la commande
+                Merci de remplir votre profil avant de passer la commande
             </div>
         )}
 
