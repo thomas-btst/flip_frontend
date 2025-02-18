@@ -65,7 +65,7 @@ export function Command({commandId}: {commandId: string}) {
             </header>
             <div className="flex flex-col md:flex-row items-start md:space-x-20 md:space-y-0 space-y-7">
                 <div className="space-y-3">
-                    <h3 className="text-lg font-bold">Addresse de livraison</h3>
+                    <h3 className="text-lg font-bold">Adresse de livraison</h3>
                     <div className="space-y-2">
                         <div className="flex space-x-2">
                             <FontAwesomeIcon icon={faLocationDot} className="text-red-900 size-5"/>
