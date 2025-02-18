@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { commandStatus } from "../../utils/command"
 import { ShortCommandDto } from "../../api/dto/CommandDto"
 
-export function Commands({commands}: {commands: ShortCommandDto[]}) {
+export function Commands({commands, admin}: {commands: ShortCommandDto[], admin?: boolean}) {
     return <section className="max-w-5xl mx-auto my-5 p-8 bg-gray-50 space-y-6">
         <h2 className="text-2xl font-bold text-center">Commandes</h2>
         {commands.length === 0 &&
@@ -17,7 +17,7 @@ export function Commands({commands}: {commands: ShortCommandDto[]}) {
                 return <div key={command.id} className="flex relative p-4 bg-white border border-gray-200 rounded-lg shadow w-full sm:p-8 justify-evenly items-center space-x-8">
                     <FontAwesomeIcon icon={status.icon} className={`absolute font-semibold size-5 top-2 left-2 ${status.className}`} title={command.status === null ? "Non payée" : status.title}/>
                     <Link
-                        to={`/command/${encodeURIComponent(command.id)}`}
+                        to={`${admin ? "/admin" : ""}/command/${encodeURIComponent(command.id)}`}
                         className="flex flex-col justify-between text-left hover:underline"
                     >
                         <h3 className="text-lg font-semibold">Commande du {formatDate(new Date(command.date))}</h3>

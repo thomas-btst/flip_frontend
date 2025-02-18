@@ -28,6 +28,7 @@ import { AdminUserPage } from "./pages/admin/user/AdminUserPage";
 import { PaymentReturn } from "./features/payment/PaymentReturn";
 import { PaymentForm } from "./features/payment/PaymentForm";
 import { StatsPage } from "./pages/admin/StatsPage";
+import { DisclaimerBanner } from "./features/DisclaimerBanner";
 
 function AuthenticatedRoute() {
     if (useAuth() !== null)
@@ -47,7 +48,7 @@ export default function App() {
             <AuthProvider>
                 <Router>
                     <Routes>
-                        <Route path='/'>
+                        <Route path='/' element={<DisclaimerBanner/>}>
                             <Route path='login' element={<LoginPage/>}/>
                             <Route path='register' element={<RegisterPage/>}/>
                             <Route path='activate/:email' element={<ActivatePage/>}/>

@@ -14,6 +14,6 @@ export function AdminUserPage() {
     })
     return <div className="mx-3">
         <AdminUser userId={userId}/>
-        {commands && <Commands commands={commands}/>}
+        {commands && <Commands admin commands={commands}/>}
     </div>
 }

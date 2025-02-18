@@ -13,10 +13,10 @@ export function ContactPage() {
                         <strong>Adresse :</strong> <a target="_blank" href="https://maps.app.goo.gl/1hJo4bHsBVCkFZXg9" className="hover:underline text-red-700" rel="noreferrer">123 Rue du Skate, 13000 Marseille, France</a>
                     </p>
                     <p className="text-lg text-gray-700 mb-4">
-                        <strong>Téléphone :</strong> <a className="hover:underline text-red-700" href="tel:0909090909">0909090909</a>
+                        <strong>Téléphone :</strong> <a className="hover:underline text-red-700" href="tel:0909090909">0782713311</a>
                     </p>
                     <p className="text-lg text-gray-700 mb-4">
-                        <strong>Email :</strong> <a className="hover:underline text-red-700" href= "mailto:flip.skateshop.noreply@gmail.com">flip.skateshop.noreply@gmail.com</a>
+                        <strong>Email :</strong> <a className="hover:underline text-red-700" href= "mailto:flip.skateshop.noreply@gmail.com">thomas.chadecima@gmail.com</a>
                     </p>
 
                     <div className="mt-8">

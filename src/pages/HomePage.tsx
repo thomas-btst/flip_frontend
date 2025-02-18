@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
 import { ProductTranslation, ProductType } from "../api/dto/Product";
+import skateboard from "../assets/images/skateboard.jpg"
+import deck from "../assets/images/deck.jpg"
+import bearing from "../assets/images/bearing.jpg"
+import wheels from "../assets/images/wheels.jpg"
+import grip from "../assets/images/grip.webp"
+import truck from "../assets/images/truck.webp"
 
 function Product({img, type}: {img: string, type: ProductType}) {
     return <Link to={`/search?types=${encodeURIComponent(type)}`} className={`rounded relative flex justify-center aspect-square hover:scale-110 transition-all`}>
@@ -22,12 +28,12 @@ export function HomePage() {
         <div className="container max-w-5xl mx-auto px-6">
             <h2 className="text-3xl font-bold text-center mb-8">Nos Produits</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <Product img="/skateboard.jpg" type="SKATE"/>
-                <Product img="/deck.jpg" type="DECK"/>
-                <Product img="/bearing.jpg" type="BEARING"/>
-                <Product img="/wheels.jpg" type="WHEEL"/>
-                <Product img="/grip.webp" type="GRID_TAPE"/>
-                <Product img="/truck.webp" type="TRUCK"/>
+                <Product img={skateboard} type="SKATE"/>
+                <Product img={deck} type="DECK"/>
+                <Product img={bearing} type="BEARING"/>
+                <Product img={wheels} type="WHEEL"/>
+                <Product img={grip} type="GRID_TAPE"/>
+                <Product img={truck} type="TRUCK"/>
             </div>
         </div>
     </section>
