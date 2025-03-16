@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom"
 import { AxiosError } from "axios"
 import { NotFound } from "../../pages/NotFound"
 import { useAuth } from "../../contexts/AuthContext"
+import { ProductPagination } from "./search/ProductsPagination"
 
 export function Product({productId}: {productId: string}) {
     const auth = useAuth()
@@ -118,5 +119,9 @@ export function Product({productId}: {productId: string}) {
                 {UNKNOWN_ERROR}
             </div>
         )}
+        <div className="mt-10 space-y-10">
+            <h2 className="text-2xl font-bold text-center">Recommandations</h2>
+            {product && <ProductPagination types={[product.type]}/>}
+        </div>
     </div>
 }
