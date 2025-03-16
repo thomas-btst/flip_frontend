@@ -3,6 +3,7 @@ import { Bar, SearchParams } from "./Bar";
 import { useMemo } from "react";
 import { isProductType } from "../api/dto/Product";
 import { Footer } from "./Footer";
+import { Chatbot } from "./Chatbot";
 
 export function Layout({context}: {context?: SearchParams}) {
     return <div className="flex flex-col min-h-screen bg-gray-50">
@@ -10,6 +11,7 @@ export function Layout({context}: {context?: SearchParams}) {
         <div className="flex-1">
             <Outlet context={context}/>
         </div>
+        <Chatbot/>
         <Footer/>
     </div>
 }
