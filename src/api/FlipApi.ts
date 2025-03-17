@@ -5,6 +5,7 @@ import { CreateProductDto, ProductPageDto, ProductDto, ProductPaginationDto, Pro
 import { CartDto, CartQuantityDto } from "./dto/CartDto"
 import { CommandDto, CommandPageDto, CommandsStatsDto, CommandStatus, ShortCommandDto } from "./dto/CommandDto"
 import { AuthStore } from "../utils/storage"
+import { CreateFeedbackDto, FeedbackDto } from "./dto/FeedbackDto"
 
 const apiURL = import.meta.env.VITE_API_URL as string
 
@@ -327,6 +328,18 @@ export const APIRoutes = {
     GETUsersStats: (): RequestConfig<UsersStatsDto> => ({
         method: "GET",
         url: '/users/stats',
+        bearer: true,
+    }),
+
+    GETProductFeedbacks: (productId: string): RequestConfig<FeedbackDto[]> => ({
+        method: "GET",
+        url: `/feedbacks/products/${encodeURIComponent(productId)}`,
+    }),
+
+    PutProductFeedback: (productId: string, feedback: CreateFeedbackDto): RequestConfig<EmptyBody> => ({
+        method: "PUT",
+        url: `/feedbacks/products/${encodeURIComponent(productId)}`,
+        data: feedback,
         bearer: true,
     }),
 }

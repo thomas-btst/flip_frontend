@@ -22,6 +22,7 @@ export interface ProductDto {
     price: number,
     picture: string,
     type: ProductType,
+    rate: number | null,
 }
 
 export interface CreateProductDto {

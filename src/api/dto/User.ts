@@ -40,3 +40,9 @@ export interface ShortUserDto {
 export interface UsersStatsDto {
     count: number,
 }
+
+export interface FeedbackUserDto {
+    firstName: string,
+    lastName: string,
+    logo: string | null,
+}
